@@ -1,0 +1,9 @@
+{
+  "model": "gpt-6-luna-2026-09-22",
+  "sent": "¿Adónde fuiste ayer? Mi mamá compró el pañuelo.",
+  "read_back": "¿Adónde fuiste ayer? Mi mamá compró el pañuelo.",
+  "accents_dropped": [],
+  "prompt_tokens": 144,
+  "completion_tokens": 18,
+  "total_tokens": 162
+}

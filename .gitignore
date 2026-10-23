@@ -1,0 +1,21 @@
+# Secrets -- never commit. The teaching staff supply their own .env one level up.
+.env
+.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Student work is not public data. Only the synthetic samples in
+# data/samples/ are tracked; anything dropped in uploads/ stays local.
+data/uploads/
+*.db-journal
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,12 @@
+# Agent framework. Slim package plus only the extras this project uses.
+pydantic-ai-slim[openai]>=2.54.0
+openai>=3.26.1
+
+# Web UI.
+streamlit>=1.40
+
+# Image handling for scanned/photographed handwriting.
+pillow>=11.0
+
+python-dotenv>=1.0
+pydantic>=2.9
