@@ -48,13 +48,35 @@ SAMPLES_DIR = ROOT / "data" / "samples"
 OUTPUT_DIR = ROOT / "output"
 
 # --- Pricing ---------------------------------------------------------------
-# USD per 1,000,000 tokens. PLACEHOLDERS -- replace with the course rate sheet
-# for gpt-6-luna before quoting any cost figure in the report. Every dollar
-# number the app prints derives from these three constants, so they are the
-# only thing that needs correcting.
-PRICE_PER_1M_INPUT = 0.0
-PRICE_PER_1M_CACHED_INPUT = 0.0
-PRICE_PER_1M_OUTPUT = 0.0
+# USD per 1,000,000 tokens.
+#
+# WHERE THIS NUMBER COMES FROM
+# ----------------------------
+# No published per-token rate sheet for gpt-6-luna was available, so the rate
+# is derived from this account's own Portkey analytics: $29.72 spent across
+# 34.1M tokens over 90 days = $0.872 per 1M tokens, blended across input,
+# cached input and output.
+#
+# WHAT THAT MEANS FOR THE NUMBERS
+# -------------------------------
+# A blended rate cannot price the three token classes separately, so all three
+# constants are equal. Two consequences, both stated in the report rather than
+# hidden:
+#   * Cost per run is sound -- it only needs total tokens, which we measure.
+#   * The dollar value of prompt caching is NOT captured; with equal rates,
+#     a cached token costs the same as a fresh one. Caching is therefore
+#     reported in tokens (83.6% of input served from cache on a warm run),
+#     which is measured directly and needs no price at all.
+#
+# If a real rate sheet turns up, set the three values and everything that
+# prints a dollar figure updates. Nothing else needs touching.
+BLENDED_PRICE_PER_1M = 0.872
+PRICE_PER_1M_INPUT = BLENDED_PRICE_PER_1M
+PRICE_PER_1M_CACHED_INPUT = BLENDED_PRICE_PER_1M
+PRICE_PER_1M_OUTPUT = BLENDED_PRICE_PER_1M
+PRICING_IS_BLENDED = (
+    PRICE_PER_1M_INPUT == PRICE_PER_1M_CACHED_INPUT == PRICE_PER_1M_OUTPUT
+)
 PRICING_IS_PLACEHOLDER = not any(
     (PRICE_PER_1M_INPUT, PRICE_PER_1M_CACHED_INPUT, PRICE_PER_1M_OUTPUT)
 )

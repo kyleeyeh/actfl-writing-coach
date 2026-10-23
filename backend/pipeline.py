@@ -2,8 +2,20 @@
 
 Every stage appends a `TraceStep`. That trace is what the UI renders and what
 gets screenshotted for the "one real run traced step by step" section of the
-report, so it records inputs, outputs, tokens and timing for each agent rather
-than just the final answer.
+report, so it records inputs, outputs, tokens and timing per agent rather than
+just the final answer.
+
+TWO ENTRY POINTS, ON PURPOSE
+----------------------------
+`transcribe_step()` and `assess_step()` are separate because a human has to be
+able to read and fix the transcript before anything is graded on it. That is
+not a UI nicety. Measured on the dev fixtures, the transcriber turned
+"entonces" into "entonses", and the Accuracy evaluator then cited the
+misreading as a student spelling error -- a fabricated error, invented by OCR
+and graded as if real. The confirm step is the defence against that, so the
+pipeline is shaped to make skipping it the unusual path.
+
+`run()` composes both and is what the CLI and the tests use.
 """
 
 from __future__ import annotations
@@ -32,6 +44,8 @@ class TraceStep:
 @dataclass
 class RunResult:
     transcript: Transcription | None = None
+    transcript_text: str = ""          # may be human-corrected
+    human_edited: bool = False
     findings: list[CriterionFinding] = field(default_factory=list)
     placement: Placement | None = None
     drills: DrillSet | None = None
@@ -46,21 +60,12 @@ class RunResult:
         return not self.over_claims and all(q.found for q in self.quote_checks)
 
 
-def run(
-    *,
-    image_data_url: str,
-    prompt_text: str,
-    parallel: bool = True,
-    label: str = "run",
-) -> RunResult:
-    """Full pipeline for one submission."""
-    res = RunResult(ledger=Ledger(label=label))
-    t = res.trace
-
-    # --- 1. transcribe -----------------------------------------------------
+def transcribe_step(*, image_data_url: str, res: RunResult) -> RunResult:
+    """Read the image and scan it for injected instructions. No grading yet."""
     t0 = time.time()
     res.transcript = agents.transcribe(image_data_url=image_data_url, ledger=res.ledger)
-    t.append(
+    res.transcript_text = res.transcript.text
+    res.trace.append(
         TraceStep(
             "transcriber",
             f"{len(res.transcript.text.split())} words, "
@@ -75,16 +80,15 @@ def run(
         )
     )
 
-    # --- 2. injection scan, before anything reasons over the text ----------
+    # Scan before anything reasons over the text.
     t0 = time.time()
     res.injection_hits = guardrails.find_injection_attempts(res.transcript.text)
-    t.append(
+    res.trace.append(
         TraceStep(
             "guardrail:injection",
             (
-                f"BLOCKED CONTENT NEUTRALISED -- {len(res.injection_hits)} "
-                "instruction-like span(s) found in the composition and treated "
-                "as data"
+                f"BLOCKED -- {len(res.injection_hits)} instruction-like span(s) "
+                "found in the composition and treated as data"
                 if res.injection_hits
                 else "no instruction-like text in the composition"
             ),
@@ -93,39 +97,51 @@ def run(
             blocked=bool(res.injection_hits),
         )
     )
+    return res
 
-    # --- 3. four criterion specialists -------------------------------------
+
+def assess_step(
+    *, prompt_text: str, res: RunResult, parallel: bool = True
+) -> RunResult:
+    """Grade `res.transcript_text`, which may have been corrected by a human."""
+    transcript = res.transcript_text
+
+    # --- four criterion specialists ----------------------------------------
     t0 = time.time()
 
     def one(c: str) -> CriterionFinding:
         return agents.evaluate_criterion(
-            criterion=c,
-            transcript=res.transcript.text,
-            prompt_text=prompt_text,
+            criterion=c, transcript=transcript, prompt_text=prompt_text,
             ledger=res.ledger,
         )
 
     if parallel:
-        # Threads, not asyncio: the OpenAI client here is synchronous and the
-        # work is entirely network-bound.
+        # Threads, not asyncio: the client is synchronous and the work is
+        # entirely network-bound.
         with ThreadPoolExecutor(max_workers=4) as pool:
             res.findings = list(pool.map(one, CRITERIA))
     else:
         res.findings = [one(c) for c in CRITERIA]
 
     spread = ", ".join(
-        f"{f.criterion}={f.consistent_with_level[:4]} {f.consistent_with_sublevel or ''}".strip()
+        f"{f.criterion}={f.consistent_with_level[:4]} "
+        f"{f.consistent_with_sublevel or ''}".strip()
         for f in res.findings
     )
-    t.append(
-        TraceStep("eval_F/A/C/T", spread, [f.model_dump() for f in res.findings], time.time() - t0)
+    res.trace.append(
+        TraceStep(
+            "eval_F/A/C/T",
+            spread,
+            [f.model_dump() for f in res.findings],
+            time.time() - t0,
+        )
     )
 
-    # --- 4. deterministic quote check --------------------------------------
+    # --- deterministic quote check -----------------------------------------
     t0 = time.time()
-    res.quote_checks = guardrails.check_quotes(res.transcript.text, res.findings)
+    res.quote_checks = guardrails.check_quotes(transcript, res.findings)
     bad = [q for q in res.quote_checks if not q.found]
-    t.append(
+    res.trace.append(
         TraceStep(
             "guardrail:quotes",
             f"{len(res.quote_checks) - len(bad)}/{len(res.quote_checks)} quotes verified"
@@ -136,12 +152,12 @@ def run(
         )
     )
 
-    # --- 5. adjudicate ------------------------------------------------------
+    # --- adjudicate ---------------------------------------------------------
     t0 = time.time()
     res.placement = agents.adjudicate(
-        findings=res.findings, transcript=res.transcript.text, ledger=res.ledger
+        findings=res.findings, transcript=transcript, ledger=res.ledger
     )
-    t.append(
+    res.trace.append(
         TraceStep(
             "adjudicator",
             f"consistent with {res.placement.consistent_with_level} "
@@ -152,14 +168,14 @@ def run(
         )
     )
 
-    # --- 6. over-claim check -----------------------------------------------
+    # --- over-claim check ---------------------------------------------------
     t0 = time.time()
     res.over_claims = guardrails.find_over_claims(
         res.placement.rationale,
         res.placement.caveat,
         *[f.ceiling_reason for f in res.findings],
     )
-    t.append(
+    res.trace.append(
         TraceStep(
             "guardrail:over-claim",
             f"{len(res.over_claims)} over-claiming sentence(s)"
@@ -171,19 +187,30 @@ def run(
         )
     )
 
-    # --- 7. drills ----------------------------------------------------------
+    # --- drills -------------------------------------------------------------
     t0 = time.time()
     res.drills = agents.generate_drills(
         placement=res.placement, findings=res.findings, ledger=res.ledger
     )
-    t.append(
+    res.trace.append(
         TraceStep(
             "drill_generator",
-            f"{len(res.drills.drills)} items targeting "
-            f"{res.placement.limiting_criterion}",
+            f"{len(res.drills.drills)} items targeting {res.placement.limiting_criterion}",
             res.drills.model_dump(),
             time.time() - t0,
         )
     )
-
     return res
+
+
+def run(
+    *,
+    image_data_url: str,
+    prompt_text: str,
+    parallel: bool = True,
+    label: str = "run",
+) -> RunResult:
+    """Full pipeline, no human in the loop. Used by the CLI and the harness."""
+    res = RunResult(ledger=Ledger(label=label))
+    transcribe_step(image_data_url=image_data_url, res=res)
+    return assess_step(prompt_text=prompt_text, res=res, parallel=parallel)
