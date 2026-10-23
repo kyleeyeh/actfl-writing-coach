@@ -130,3 +130,15 @@ class VerifierVerdict(BaseModel):
         description="Sentences that assert a rating rather than evidence.",
     )
     passed: bool
+
+
+class CombinedFindings(BaseModel):
+    """All four criteria from a single call.
+
+    The cheap arm of the cost-cutting experiment in
+    `scripts/compare_architectures.py`. One call instead of four, so roughly
+    a quarter of the prompt tokens -- the question the report answers is
+    whether the assessment survives the saving.
+    """
+
+    findings: list[CriterionFinding] = Field(min_length=4, max_length=4)

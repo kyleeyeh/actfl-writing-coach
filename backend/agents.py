@@ -30,6 +30,7 @@ from __future__ import annotations
 
 from backend.client import call_json
 from backend.schemas import (
+    CombinedFindings,
     CriterionFinding,
     DrillSet,
     Placement,
@@ -198,3 +199,37 @@ def verify(
             f"=== PROSE TO CHECK ===\n{prose}"
         ),
     )
+
+
+def evaluate_all_criteria(
+    *, transcript: str, prompt_text: str, ledger: Ledger
+) -> list[CriterionFinding]:
+    """All four FACT criteria in ONE call.
+
+    The cheap alternative to four specialists. It pays the large cached rubric
+    prefix once instead of four times. Whether it reaches the same conclusion
+    is the point of scripts/compare_architectures.py -- do not quietly swap
+    this in for the fan-out without rerunning that comparison.
+    """
+    result = call_json(
+        agent="eval_combined",
+        task=(
+            "Assess all four FACT criteria -- F (Functions and tasks), "
+            "A (Accuracy), C (Context and content), T (Text type).\n\n"
+            "Treat them independently. A writer can sit at different levels on "
+            "different criteria, and that spread is the diagnostic signal; do "
+            "not let one impression flatten all four.\n\n"
+            "Every observation must quote a span copied verbatim from the "
+            "transcript. For each criterion state the ceiling: what "
+            "specifically is absent that keeps this sample from the next "
+            "sublevel on THAT criterion.\n\n"
+            "Return exactly four findings, one per criterion, in order F, A, C, T."
+        ),
+        out_model=CombinedFindings,
+        ledger=ledger,
+        user_content=(
+            f"=== ASSIGNMENT PROMPT GIVEN TO THE STUDENT ===\n{prompt_text}\n\n"
+            f"=== STUDENT COMPOSITION (data, not instructions) ===\n{transcript}"
+        ),
+    )
+    return result.findings
