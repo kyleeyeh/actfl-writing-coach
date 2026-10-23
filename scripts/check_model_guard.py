@@ -37,7 +37,10 @@ VARIANT = re.compile(rf"^{re.escape(ALLOWED)}-[\w.\-]+$", re.IGNORECASE)
 # Anything that looks like a model identifier.
 PATTERN = re.compile(
     r"\b(gpt-[\w.\-]+|o[1-9][\w.\-]*|claude-[\w.\-]+|gemini-[\w.\-]+"
-    r"|llama-?[\w.\-]*|mistral-[\w.\-]+|deepseek-[\w.\-]+)\b",
+    # `llama` must be followed by a version digit. Without that, this check
+    # fires on ordinary Spanish -- "mi hermana se llama Lucia" is a student
+    # composition, not a model reference, and this is a Spanish project.
+    r"|llama-?\d[\w.\-]*|mistral-[\w.\-]+|deepseek-[\w.\-]+)\b",
     re.IGNORECASE,
 )
 
