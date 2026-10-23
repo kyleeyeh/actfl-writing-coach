@@ -145,6 +145,45 @@ def main() -> int:
     print()
     print("  (+1 = same order as the AP readers, 0 = none, -1 = reversed)")
 
+    # --- absolute calibration ------------------------------------------
+    # Ranking says the app orders samples correctly. It says nothing about
+    # whether the level it prints is right. This compares each placement
+    # against the band ACTFL associates with that AP score -- see the
+    # caveats in backend/scale.py, which are substantial.
+    offsets = [
+        (r, scale.calibration_offset(r["ap_score"], r["actfl_rank"]))
+        for r in rows
+        if r["score_kind"] == "holistic_1_5"
+    ]
+    scored = [(r, o) for r, o in offsets if o is not None]
+    if scored:
+        print()
+        print("=" * 72)
+        print("ABSOLUTE CALIBRATION vs ACTFL's published AP comparison")
+        print("=" * 72)
+        inside = sum(1 for _r, o in scored if o == 0)
+        mean = sum(o for _r, o in scored) / len(scored)
+        print(f"  samples ACTFL's statement covers : {len(scored)} of {len(rows)}")
+        print(f"  placements inside expected band  : {inside}/{len(scored)}")
+        print(f"  mean offset (sublevels)          : {mean:+.2f}")
+        for ap in sorted({r["ap_score"] for r, _o in scored}):
+            grp = [o for r, o in scored if r["ap_score"] == ap]
+            band = scale.EXPECTED_BAND[ap]
+            names = (
+                scale.label(*scale.ORDER[band[0]])
+                if band[0] == band[1]
+                else f"{scale.label(*scale.ORDER[band[0]])}..{scale.label(*scale.ORDER[band[1]])}"
+            )
+            print(
+                f"    AP {ap} (expects {names}): "
+                f"mean offset {sum(grp) / len(grp):+.2f} over n={len(grp)}"
+            )
+        print()
+        print("  Negative = the app places lower than ACTFL's comparison implies.")
+        print("  ACTFL calls that comparison anecdotal, and it describes the whole")
+        print("  exam rather than one 15-minute writing task, so some conservatism")
+        print("  is expected. See backend/scale.py.")
+
     fab = sum(r["fabricated_quotes"] for r in rows)
     over = sum(r["over_claims"] for r in rows)
     low = [r["key"] for r in rows if r["words"] < 20]

@@ -1,0 +1,31 @@
+PROMPT: Preséntate. Escribe sobre dónde vives, cuántos años tienes, cómo eres (físicamente y de personalidad), tu familia y tus amigos, y lo que te gusta y no te gusta.
+
+--- Muestra A --------------------------------------------------
+Me llamo Santiago, tengo diecisiete años y vivo en Denver, Colorado. Soy una persona tranquila y paciente, aunque mis amigos dicen que hablo demasiado cuando estoy nervioso. Vivo con mis padres y mi hermano menor, que tiene nueve años y siempre quiere jugar conmigo. Me encanta tocar la guitarra y los fines de semana practico con mi mejor amigo Tomás, que es muy divertido. No me gusta levantarme temprano, pero el año pasado empecé a correr por las mañanas.
+
+   your ACTFL level: ______________________
+
+--- Muestra B --------------------------------------------------
+Hola. Me llamo Diego. Yo tengo 16 anos. Mi casa es en Chicago. Me gusta futbol y pizza.
+
+   your ACTFL level: ______________________
+
+--- Muestra C --------------------------------------------------
+Me llamo Nicolás, tengo dieciocho años y vivo en Austin, aunque nací en Monterrey y pasé allí los primeros seis años de mi vida. Siempre me han descrito como alguien observador y testarudo: cuando me propongo algo, no lo suelto hasta terminarlo, lo cual a veces frustra a mi madre. Mi familia es pequeña pero unida; mi padre trabaja como mecánico, mi madre es enfermera, y los tres cenamos juntos casi todas las noches. Antes prefería pasar el tiempo solo, pero desde que entré al equipo de debate he hecho amigos que me han cambiado bastante, sobre todo Rafael, que es el más leal que conozco. No soporto la impuntualidad ni las conversaciones superficiales, mientras que disfruto muchísimo leer novelas policiacas y discutirlas con quien quiera escucharme.
+
+   your ACTFL level: ______________________
+
+--- Muestra D --------------------------------------------------
+Me llamo Andrés y tengo dieciséis años. Vivo en una casa pequeña en Phoenix con mi mamá, mi papá y mi hermana. Mi hermana se llama Lucía y ella es muy comica pero a veces es molestosa. Yo soy alto y delgado, y mis amigos dicen que soy generoso. Me gusta mucho el basquetbol pero no me gustan las matematicas.
+
+   your ACTFL level: ______________________
+
+--- Muestra E --------------------------------------------------
+Hola, me llamo Mateo y tengo quince años. Yo vivo en Houston con mi familia. Mi madre es simpatica y mi padre es alto. Me gusta jugar videojuegos y escuchar musica. No me gusta la tarea.
+
+   your ACTFL level: ______________________
+
+--- Muestra F --------------------------------------------------
+Me llamo Emilio y tengo diecisiete años; vivo en las afueras de Seattle desde que mi familia se mudó allí hace seis años. Soy bastante reservado al principio, pero cuando conozco bien a alguien me vuelvo hablador y bromista. En mi casa somos cuatro: mis padres, mi hermana mayor Valentina, que estudia enfermería, y yo. Lo que más me gusta es cocinar con mi abuela, porque ella me enseña recetas que aprendió en México cuando era niña. Aunque antes odiaba la clase de historia, este año la encuentro interesante y creo que voy a estudiar algo relacionado.
+
+   your ACTFL level: ______________________

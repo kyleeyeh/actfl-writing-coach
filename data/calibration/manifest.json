@@ -1,0 +1,29 @@
+{
+  "prompt_es": "Preséntate. Escribe sobre dónde vives, cuántos años tienes, cómo eres (físicamente y de personalidad), tu familia y tus amigos, y lo que te gusta y no te gusta.",
+  "samples": [
+    {
+      "id": "A",
+      "file": "calib_A.png"
+    },
+    {
+      "id": "B",
+      "file": "calib_B.png"
+    },
+    {
+      "id": "C",
+      "file": "calib_C.png"
+    },
+    {
+      "id": "D",
+      "file": "calib_D.png"
+    },
+    {
+      "id": "E",
+      "file": "calib_E.png"
+    },
+    {
+      "id": "F",
+      "file": "calib_F.png"
+    }
+  ]
+}

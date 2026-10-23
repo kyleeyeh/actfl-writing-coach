@@ -49,6 +49,17 @@ SPLIT_RE = re.compile(
 )
 # The page label stamped on each response image page, e.g. "Q1 Sample 1A 1 of 2".
 PAGE_RE = re.compile(r"Q(\d+)\s+Sample\s+([0-9]+[A-Z])\s+(\d+)\s+of\s+(\d+)", re.I)
+# 2024 stamps its response pages differently -- "Question 1, Sample 1A" -- and
+# gives no "n of m" counter, so a response running to several pages simply
+# repeats the label. Parts are then numbered by order of appearance.
+PAGE_RE_ALT = re.compile(r"Question\s+(\d+),?\s+Sample:?\s+([0-9]+[A-Z])", re.I)
+# And a third: "Task 2 - Sample 2A, Page 1 of 3" (the "of N" is sometimes
+# absent on single-page responses).
+PAGE_RE_TASK = re.compile(
+    r"Task\s+(\d+)\s*[-–]\s*Sample\s+([0-9]+[A-Z]),?\s*Page\s+(\d+)"
+    r"(?:\s+of\s+(\d+))?",
+    re.I,
+)
 
 
 # Some years print the task overview in the PDF; others just point at the
@@ -143,14 +154,49 @@ def ingest(pdf: Path) -> list[dict]:
         print(f"  !! no scores found in {pdf.name}; skipping")
         return []
 
-    records: list[dict] = []
-    for idx, page in enumerate(reader.pages):
-        m = PAGE_RE.search(pages[idx])
-        if not m:
+    # Find every page that announces which sample it belongs to.
+    anchors: list[tuple[int, str, str, int, int]] = []  # idx, q, sid, part, total
+    seen_parts: dict[str, int] = {}
+    for idx in range(len(reader.pages)):
+        text = pages[idx]
+        m = PAGE_RE.search(text)
+        if m:
+            anchors.append(
+                (idx, m.group(1), m.group(2).upper(), int(m.group(3)), int(m.group(4)))
+            )
             continue
-        question, sample_id, part, total = (
-            m.group(1), m.group(2).upper(), int(m.group(3)), int(m.group(4)),
-        )
+        m = PAGE_RE_TASK.search(text)
+        if m:
+            sid = m.group(2).upper()
+            total = int(m.group(4)) if m.group(4) else 1
+            anchors.append((idx, m.group(1), sid, int(m.group(3)), total))
+            continue
+        m = PAGE_RE_ALT.search(text)
+        if m:
+            sid = m.group(2).upper()
+            part = seen_parts.get(sid, 0) + 1
+            seen_parts[sid] = part
+            anchors.append((idx, m.group(1), sid, part, part))
+
+    # A multi-page response sometimes has one page whose label did not survive
+    # text extraction -- 2024 Task 2 Sample 2A declares "Page 1 of 3" and
+    # "Page 3 of 3" but its middle page extracts as garbage. Response pages are
+    # contiguous, so the declared total is used to fill the gap rather than
+    # silently dropping a page of the student's essay.
+    filled: list[tuple[int, str, str, int, int]] = list(anchors)
+    for _idx, q, sid, _part, total in list(anchors):
+        if total <= 1:
+            continue
+        have = {p for (_i, _q, s, p, _t) in anchors if s == sid}
+        if len(have) >= total:
+            continue
+        start = min(i for (i, _q, s, _p, _t) in anchors if s == sid)
+        for p in range(1, total + 1):
+            if p not in have and start + p - 1 < len(reader.pages):
+                filled.append((start + p - 1, q, sid, p, total))
+
+    records: list[dict] = []
+    for idx, question, sample_id, part, total in sorted(filled):
         key = f"{pdf.stem}_{sample_id}"
         name = f"{key}_p{part}.png"
         if not render_page(pdf, idx, OUT / name):
@@ -175,10 +221,15 @@ def ingest(pdf: Path) -> list[dict]:
                 "commentary": commentary_for(blob, sample_id)[:2000],
             }
             records.append(rec)
-        rec["files"].append(name)
+        if name not in rec["files"]:
+            rec["files"].append(name)
 
     for r in records:
-        r["files"].sort()
+        # Sort by the page number in the filename, not lexically, so page 10
+        # does not sort between pages 1 and 2.
+        r["files"].sort(key=lambda f: int(re.search(r"_p(\d+)\.png$", f).group(1)))
+        # For the 2024 layout the true page count is only known now.
+        r["pages_total"] = max(r["pages_total"], len(r["files"]))
     return records
 
 
