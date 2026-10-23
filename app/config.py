@@ -47,6 +47,18 @@ RUBRIC_DIR = ROOT / "rubric"
 SAMPLES_DIR = ROOT / "data" / "samples"
 OUTPUT_DIR = ROOT / "output"
 
+# --- Pricing ---------------------------------------------------------------
+# USD per 1,000,000 tokens. PLACEHOLDERS -- replace with the course rate sheet
+# for gpt-6-luna before quoting any cost figure in the report. Every dollar
+# number the app prints derives from these three constants, so they are the
+# only thing that needs correcting.
+PRICE_PER_1M_INPUT = 0.0
+PRICE_PER_1M_CACHED_INPUT = 0.0
+PRICE_PER_1M_OUTPUT = 0.0
+PRICING_IS_PLACEHOLDER = not any(
+    (PRICE_PER_1M_INPUT, PRICE_PER_1M_CACHED_INPUT, PRICE_PER_1M_OUTPUT)
+)
+
 # --- Spend guardrails ------------------------------------------------------
 # Counted client-side; nothing is sent to the API. See backend/model_provider.
 MAX_IMAGES_PER_SUBMISSION = 4
