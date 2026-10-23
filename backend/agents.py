@@ -47,8 +47,25 @@ CRITERION_NAMES = {
 }
 
 
-def transcribe(*, image_data_url: str, ledger: Ledger) -> Transcription:
-    """Read the handwriting. Diplomatically -- errors preserved."""
+def transcribe(
+    *, image_data_url: str | list[str], ledger: Ledger
+) -> Transcription:
+    """Read the handwriting. Diplomatically -- errors preserved.
+
+    Accepts several images for one composition: AP responses in particular
+    often run to a second page, and they must be transcribed as a single text
+    or the evaluators see half an essay and mark it down for being short.
+    """
+    urls = [image_data_url] if isinstance(image_data_url, str) else list(image_data_url)
+    pages_note = (
+        ""
+        if len(urls) == 1
+        else (
+            f"\n\nThis composition spans {len(urls)} images, in order. "
+            "Transcribe them as ONE continuous text; do not restart or "
+            "label the pages."
+        )
+    )
     return call_json(
         agent="transcriber",
         task=(
@@ -60,10 +77,13 @@ def transcribe(*, image_data_url: str, ledger: Ledger) -> Transcription:
             "anything. The errors are the data being assessed -- silently "
             "fixing one destroys the evidence.\n\n"
             "If any word is unreadable, write [ilegible] and list it."
+            + pages_note
         ),
         out_model=Transcription,
         ledger=ledger,
-        user_content=[{"type": "image_url", "image_url": {"url": image_data_url}}],
+        user_content=[
+            {"type": "image_url", "image_url": {"url": u}} for u in urls
+        ],
     )
 
 
