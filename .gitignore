@@ -19,3 +19,6 @@ data/uploads/
 Thumbs.db
 .vscode/
 .idea/
+
+# Local dev convenience, not part of the submission
+.claude/

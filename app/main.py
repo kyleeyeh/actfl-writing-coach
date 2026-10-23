@@ -316,16 +316,18 @@ with tabs[4]:
     c[3].metric("Cost this run", f"${led.cost_usd:.4f}")
     st.code(led.table(), language=None)
     per_run = led.cost_usd
+    # Dollar signs must be escaped or Streamlit's markdown treats the text
+    # between two of them as LaTeX and renders it in italic maths.
     st.markdown(
         f"At four compositions per student per month: "
-        f"**${per_run * 4:.3f}** per student, "
-        f"**${per_run * 4 * 100:,.2f}**/mo at 100 students, "
-        f"**${per_run * 4 * 10_000:,.0f}**/mo at 10,000."
+        f"**\\${per_run * 4:.3f}** per student, "
+        f"**\\${per_run * 4 * 100:,.2f}**/mo at 100 students, "
+        f"**\\${per_run * 4 * 10_000:,.0f}**/mo at 10,000."
     )
     if PRICING_IS_BLENDED:
         st.caption(
-            f"Costed at a blended ${BLENDED_PRICE_PER_1M}/1M tokens derived from "
-            "this account's Portkey analytics ($29.72 over 34.1M tokens); no "
+            f"Costed at a blended \\${BLENDED_PRICE_PER_1M}/1M tokens derived from "
+            "this account's Portkey analytics (\\$29.72 over 34.1M tokens); no "
             "per-token rate sheet is published for this model. A blended rate "
             "cannot price caching separately, so the caching benefit is reported "
             "in tokens above rather than in dollars."
