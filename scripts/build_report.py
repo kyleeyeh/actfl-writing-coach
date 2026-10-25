@@ -77,8 +77,13 @@ def facts() -> dict:
 
     arch = load("architecture_comparison.json")
     if arch:
-        cost_a = sum(r["A"]["ledger"]["cost_usd"] for r in arch)
-        cost_b = sum(r["B"]["ledger"]["cost_usd"] for r in arch)
+        from app.config import PRICE_PER_1M_INPUT as _p
+
+        def _cost(led: dict) -> float:
+            return (led["prompt_tokens"] + led["completion_tokens"]) / 1e6 * _p
+
+        cost_a = sum(_cost(r["A"]["ledger"]) for r in arch)
+        cost_b = sum(_cost(r["B"]["ledger"]) for r in arch)
         f["arch"] = {
             "n": len(arch),
             "cost_a": cost_a,
@@ -91,11 +96,26 @@ def facts() -> dict:
     else:
         f["missing"].append("architecture_comparison.json")
 
+    # Costs are recomputed from token counts at the current rate rather than
+    # read from the file. Early ledgers were written while the price constants
+    # were still placeholder zeros, and a stale zero silently turns every
+    # scale figure in the report into "$0.00".
+    from app.config import PRICE_PER_1M_INPUT
+
     ledgers = sorted(OUTPUT.glob("ledger_*.json"))
-    runs = [json.loads(p.read_text(encoding="utf-8")) for p in ledgers]
+    runs = []
+    for lp in ledgers:
+        r = json.loads(lp.read_text(encoding="utf-8"))
+        total = r.get("prompt_tokens", 0) + r.get("completion_tokens", 0)
+        r["cost_usd"] = total / 1_000_000 * PRICE_PER_1M_INPUT
+        runs.append(r)
     if runs:
         f["runs"] = runs
-        f["typical"] = max(runs, key=lambda r: r["cache_hit_rate"])
+        # The median run by total tokens, so one unusually long or short
+        # composition does not become "typical".
+        f["typical"] = sorted(
+            runs, key=lambda r: r["prompt_tokens"] + r["completion_tokens"]
+        )[len(runs) // 2]
     else:
         f["missing"].append("ledger_*.json (run scripts/run_sample.py)")
 
@@ -104,6 +124,12 @@ def facts() -> dict:
         f["injection"] = inj
     else:
         f["missing"].append("run_sample_05_injection_parallel.json")
+
+    agg = load("aggregation_experiment.json")
+    if agg:
+        f["agg"] = agg
+    else:
+        f["missing"].append("aggregation_experiment.json")
 
     calib = load("calibration_result.json")
     if calib:
