@@ -32,7 +32,8 @@ from app.config import (  # noqa: E402
     PRICING_IS_BLENDED,
     SAMPLES_DIR,
 )
-from backend import pipeline  # noqa: E402
+from backend import imaging, pipeline  # noqa: E402
+from backend.client import ContentFiltered  # noqa: E402
 from backend.usage import Ledger  # noqa: E402
 
 st.set_page_config(page_title="ACTFL Writing Coach", page_icon="✎", layout="wide")
@@ -78,7 +79,7 @@ def manifest() -> dict:
 
 
 def reset() -> None:
-    for k in ("res", "stage", "image_bytes"):
+    for k in ("res", "stage", "image_bytes", "rotation", "axis_clear"):
         st.session_state.pop(k, None)
 
 
@@ -131,9 +132,41 @@ if image_bytes is None:
     st.info("Pick a sample or upload a photo in the sidebar to begin.")
     st.stop()
 
+# Orientation is suggested, never assumed. The profile picks the axis
+# reliably; which way up is left to the person looking at the page, because
+# the model cannot be trusted with it (see backend/imaging.py).
+if "rotation" not in st.session_state:
+    cands, scores = imaging.suggest_rotations(image_bytes)
+    st.session_state.rotation = cands[0]
+    st.session_state.axis_clear = imaging.axis_is_clear(scores)
+
+rotation = st.session_state.rotation
+shown = imaging.rotate(imaging.load(image_bytes), rotation)
+
 left, right = st.columns([1, 1.25], gap="large")
 with left:
-    st.image(image_bytes, caption="Submission", use_container_width=True)
+    st.image(shown, caption=f"Submission · rotated {rotation}°", use_container_width=True)
+    r1, r2, r3 = st.columns(3)
+    if r1.button("↺ 90°", use_container_width=True):
+        st.session_state.rotation = (rotation - 90) % 360
+        st.session_state.pop("res", None)
+        st.session_state.stage = "new"
+        st.rerun()
+    if r2.button("↻ 90°", use_container_width=True):
+        st.session_state.rotation = (rotation + 90) % 360
+        st.session_state.pop("res", None)
+        st.session_state.stage = "new"
+        st.rerun()
+    if r3.button("↕ 180°", use_container_width=True):
+        st.session_state.rotation = (rotation + 180) % 360
+        st.session_state.pop("res", None)
+        st.session_state.stage = "new"
+        st.rerun()
+    if not st.session_state.get("axis_clear", True):
+        st.warning(
+            "Could not work out which way up this page goes. Check it reads "
+            "correctly above before transcribing."
+        )
 
 stage = st.session_state.get("stage", "new")
 
@@ -145,15 +178,21 @@ with right:
             '<span class="muted">The transcription is deliberately literal: '
             "spelling errors, missing accents and wrong verb forms are kept "
             "exactly as written, because those errors are the evidence being "
-            "assessed.</span>",
+            "assessed. Make sure the page is the right way up first — the "
+            "model will invent a plausible composition rather than admit it "
+            "cannot read one.</span>",
             unsafe_allow_html=True,
         )
         if st.button("Transcribe", type="primary"):
-            with st.spinner("Reading the page..."):
-                res = pipeline.RunResult(ledger=Ledger(label="ui"))
-                pipeline.transcribe_step(
-                    image_data_url=data_url(image_bytes), res=res
-                )
+            try:
+                with st.spinner("Reading the page..."):
+                    res = pipeline.RunResult(ledger=Ledger(label="ui"))
+                    pipeline.transcribe_step(
+                        raw_images=[image_bytes], rotation=rotation, res=res
+                    )
+            except ContentFiltered as exc:
+                st.error(str(exc))
+                st.stop()
             st.session_state.res = res
             st.session_state.stage = "confirm"
             st.rerun()
@@ -163,11 +202,14 @@ with right:
         res = st.session_state.res
         st.subheader("Step 2 · Check the transcript")
         st.markdown(
-            '<span class="muted">Read this against the image and fix anything '
-            "misread. This step exists because a misread word becomes a "
-            "fabricated student error: in testing, <code>entonces</code> was "
-            "read as <code>entonses</code> and then graded as a spelling "
-            "mistake.</span>",
+            '<span class="muted">Read this against the image, line by line, '
+            "and fix anything misread. Two measured failures make this "
+            "step load-bearing rather than polite: <code>entonces</code> was "
+            "read as <code>entonses</code> and then graded as the student's "
+            "spelling mistake; and on a page that was upside-down the model "
+            "returned an <b>entirely invented composition</b> at 98% "
+            "confidence. If this text does not match the page, do not "
+            "assess it.</span>",
             unsafe_allow_html=True,
         )
 
