@@ -7,7 +7,7 @@ practice aimed at that specific gap.
 |---|---|
 | Author | Kyle Yeh |
 | Course | MGT 409, AI Foundations for Managers |
-| Repository | *(add the GitHub URL here before submitting)* |
+| Repository | https://github.com/kyleeyeh/actfl-writing-coach |
 | Running the app | `pip install -r requirements.txt` then `streamlit run app/main.py`; see README |
 | Model | `gpt-6-luna` via Portkey, one model, no fallback |
 

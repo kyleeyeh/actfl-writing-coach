@@ -61,6 +61,13 @@ placing a writer at their weakest criterion, which compounds four separately
 elicited conservative estimates; the remaining sublevel sits inside each
 individual criterion judgement and cannot be aggregated away.
 
+Two fixes were then attempted on that decomposition and both failed, which is
+reported in Limits rather than omitted. Changing the aggregation rule helps
+but is not defensible under ACTFL; injecting expert-labelled anchor
+compositions closed a fifth of the gap while making ordering worse and
+reintroducing fabricated quotes. The bias is real, measured, decomposed, and
+still unfixed.
+
 ### So what is this actually worth today?
 
 Stated conservatively, because the calibration result does not support a

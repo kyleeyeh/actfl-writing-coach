@@ -86,6 +86,29 @@ generator is pointed at it rather than at general review.
 
 ![The run trace and per-agent token cost, as the app reports them.](figures/ui-cost.png)
 
+### Getting the page in
+
+Real photographs broke assumptions that typed fixtures never touched. A
+landscape sheet shot by an upright phone has correct EXIF metadata and
+vertical text, so two of the first three real sheets transcribed as
+`[ilegible]`.
+
+Orientation is now found by trying candidate rotations — ranked by an ink
+projection profile, which identifies the axis reliably (2.97 against 0.35 on
+a real page) — until the model reports it could read one. That loop was built,
+abandoned and rebuilt: it only works because the transcriber will now admit
+it cannot read a page. See Safety.
+
+### Tracking a student over time
+
+Each assessment is saved, and a progress view plots the four criteria across
+a student's submissions, showing whether the criterion the app named as
+limiting actually improved. This is the part of the design that answers
+ACTFL's own objection to single-sample assessment, and the part the
+calibration bias damages least.
+
+![Four criteria tracked across one student's submissions. The app named a limiting criterion each time; this shows whether it moved.](figures/ui-progress.png)
+
 ### The deterministic layer
 
 Three checks run in plain Python, not as prompts, because a guardrail written

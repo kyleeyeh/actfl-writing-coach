@@ -40,13 +40,24 @@ the key one level up and no `.env` inside the repo.
 
 ### Using it
 
-1. Pick a bundled sample in the sidebar, or upload a photo of handwriting.
-2. **Transcribe**, then read the transcript against the image and correct it.
-   This step is deliberately not skippable — see *Why the confirm step exists*.
-3. **Assess**. Results appear in five tabs: FACT breakdown, targeted practice,
-   the full agent trace, guardrail status, and live token cost.
+Three views, in the sidebar.
 
-Try `sample_05_injection` to watch the prompt-injection defence fire.
+**Assess** — enter a student name, upload page photos (several per
+composition is fine) or pick a bundled sample. The page orientation is worked
+out automatically; rotate buttons override it. **Transcribe**, read the
+transcript against the image and correct anything misread, then **assess**.
+Results appear in six tabs: FACT breakdown, targeted practice, a printable
+sheet for the student, the full agent trace, guardrail status, and live token
+cost. Everything is saved automatically.
+
+**Progress** — one student across submissions: each criterion over time, and
+whether the gap the app named actually closed. Try the seeded student
+**Ana M.**
+
+**History** — every saved assessment, filterable by student.
+
+Worth trying: `hw_injection` is a real handwritten prompt-injection attempt,
+and `hw_control` is the same text photographed sideways.
 
 ---
 
@@ -78,10 +89,15 @@ exactly what collapsing them would save and what it would cost in agreement.
 
 ### Why the confirm step exists
 
-In testing, the transcriber read `entonces` as `entonses`, and the Accuracy
-evaluator then cited the misreading as a student spelling error. The model
-invented a mistake and graded it. A misread word becomes fabricated evidence,
-so a human reads the transcript before anything is assessed.
+Two measured failures. The transcriber read `entonces` as `entonses` and the
+Accuracy evaluator cited the misreading as the student's spelling error. And
+on an upside-down page it returned an *entirely invented composition* at 98%
+confidence — fixed by giving it explicit permission to answer `[ilegible]`,
+which it now does rather than guessing. The app also refuses to grade a page
+it could not read.
+
+A human still reads the transcript against the image before anything is
+assessed, because a misread word becomes fabricated evidence.
 
 ### Guardrails
 
@@ -133,6 +149,13 @@ The app does not need any of this to run.
 | `compare_architectures.py` | Four specialists vs one combined call: cost and agreement |
 | `fetch_ap.py` / `ingest_ap.py` | Download and prepare the expert-scored set |
 | `rank_test.py` | Rank agreement and calibration against AP scores |
+| `aggregation_experiment.py` | Compares criterion-aggregation rules against both references |
+| `abstention_experiment.py` | Whether the transcriber can be made to abstain rather than invent |
+| `build_anchors.py` | Builds the (disabled) calibration anchors |
+| `calibration_test.py` | Three-way: written target vs teacher's blind labels vs app |
+| `seed_demo_history.py` | Seeds a worked example for the progress view |
+| `build_report.py` / `build_slides.py` | Generate report.html and slides.html from measured results |
+| `make_diagram.py` | Regenerates the architecture diagram |
 
 Measured outputs land in `output/` as JSON.
 
