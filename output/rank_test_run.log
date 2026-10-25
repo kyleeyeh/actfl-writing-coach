@@ -1,0 +1,67 @@
+  ap23-apc-spanish-language-task-1_1A          AP 5  ->  Intermediate Low   (175 words, limited by A)
+  ap23-apc-spanish-language-task-1_1B          AP 3  ->  Intermediate Low   (101 words, limited by F)
+  ap23-apc-spanish-language-task-1_1C          AP 1  ->  Novice High        (99 words, limited by F)
+  ap23-apc-spanish-language-task-2_2A          AP 5  ->  Intermediate Low   (516 words, limited by A)
+  ap23-apc-spanish-language-task-2_2B          AP 3  ->  Novice High        (206 words, limited by A)
+  ap23-apc-spanish-language-task-2_2C          AP 1  ->  Novice High        (94 words, limited by T)
+  ap24-apc-spanish-language-task-1_1A          AP 5  ->  Intermediate Low   (191 words, limited by A)
+  ap24-apc-spanish-language-task-1_1B          AP 3  ->  Intermediate Low   (123 words, limited by F)
+  ap24-apc-spanish-language-task-1_1C          AP 2  ->  Intermediate Low   (89 words, limited by A)
+  ap24-apc-spanish-language-task-2_2A          AP 5  ->  Intermediate Low   (199 words, limited by A)
+  ap24-apc-spanish-language-task-2_2B          AP 3  ->  Novice High        (139 words, limited by A)
+  ap24-apc-spanish-language-task-2_2C          AP 2  ->  Novice High        (204 words, limited by A)
+  ap25-apc-spanish-language-task-1_1A          AP 5  ->  Intermediate Mid   (203 words, limited by A)
+  ap25-apc-spanish-language-task-1_1B          AP 3  ->  Intermediate Low   (118 words, limited by F)
+  ap25-apc-spanish-language-task-1_1C          AP 2  ->  Novice High        (91 words, limited by A)
+  ap25-apc-spanish-language-task-2_2A          AP 5  ->  Novice High        (387 words, limited by A)
+  ap25-apc-spanish-language-task-2_2B          AP 3  ->  Novice High        (391 words, limited by F)
+  ap25-apc-spanish-language-task-2_2C          AP 2  ->  Novice High        (218 words, limited by A)
+
+========================================================================
+RANK AGREEMENT WITH EXPERT AP SCORES
+========================================================================
+
+-- Spanish Language [holistic_1_5]  (n=18)
+   sample                                        AP  ACTFL placement
+   ap23-apc-spanish-language-task-1_1A            5  Intermediate Low
+   ap23-apc-spanish-language-task-2_2A            5  Intermediate Low
+   ap24-apc-spanish-language-task-1_1A            5  Intermediate Low
+   ap24-apc-spanish-language-task-2_2A            5  Intermediate Low
+   ap25-apc-spanish-language-task-1_1A            5  Intermediate Mid
+   ap25-apc-spanish-language-task-2_2A            5  Novice High
+   ap23-apc-spanish-language-task-1_1B            3  Intermediate Low
+   ap23-apc-spanish-language-task-2_2B            3  Novice High
+   ap24-apc-spanish-language-task-1_1B            3  Intermediate Low
+   ap24-apc-spanish-language-task-2_2B            3  Novice High
+   ap25-apc-spanish-language-task-1_1B            3  Intermediate Low
+   ap25-apc-spanish-language-task-2_2B            3  Novice High
+   ap24-apc-spanish-language-task-1_1C            2  Intermediate Low
+   ap24-apc-spanish-language-task-2_2C            2  Novice High
+   ap25-apc-spanish-language-task-1_1C            2  Novice High
+   ap25-apc-spanish-language-task-2_2C            2  Novice High
+   ap23-apc-spanish-language-task-1_1C            1  Novice High
+   ap23-apc-spanish-language-task-2_2C            1  Novice High
+   concordant 61  discordant 7  tied 101   Kendall tau-b = +0.459
+
+  (+1 = same order as the AP readers, 0 = none, -1 = reversed)
+
+========================================================================
+ABSOLUTE CALIBRATION vs ACTFL's published AP comparison
+========================================================================
+  samples ACTFL's statement covers : 12 of 18
+  placements inside expected band  : 0/12
+  mean offset (sublevels)          : -1.75
+    AP 3 (expects Intermediate Mid): mean offset -1.50 over n=6
+    AP 5 (expects Intermediate High..Advanced Mid): mean offset -2.00 over n=6
+
+  Negative = the app places lower than ACTFL's comparison implies.
+  ACTFL calls that comparison anecdotal, and it describes the whole
+  exam rather than one 15-minute writing task, so some conservatism
+  is expected. See backend/scale.py.
+
+  fabricated quotes across all runs : 0
+  over-claiming sentences           : 0
+  suspiciously short transcripts    : 0 []
+  total cost                        : $0.5140
+
+saved: C:\Users\key8\Desktop\AI Vibecode stuff\Final Project\output\rank_test.json

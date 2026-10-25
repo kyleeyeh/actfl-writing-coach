@@ -1,0 +1,62 @@
+  ap23-apc-spanish-language-task-1_1A            F=4 A=3 C=3 T=3   spread=1
+  ap23-apc-spanish-language-task-1_1B            F=3 A=3 C=3 T=3   spread=0
+  ap23-apc-spanish-language-task-1_1C            F=2 A=2 C=2 T=3   spread=1
+  ap23-apc-spanish-language-task-2_2A            F=4 A=3 C=4 T=4   spread=1
+  ap23-apc-spanish-language-task-2_2B            F=3 A=2 C=3 T=3   spread=1
+  ap23-apc-spanish-language-task-2_2C            F=2 A=2 C=2 T=2   spread=0
+  ap24-apc-spanish-language-task-1_1A            F=3 A=3 C=3 T=3   spread=0
+  ap24-apc-spanish-language-task-1_1B            F=3 A=3 C=3 T=3   spread=0
+  ap24-apc-spanish-language-task-1_1C            F=3 A=3 C=3 T=3   spread=0
+  ap24-apc-spanish-language-task-2_2A            F=4 A=3 C=3 T=4   spread=1
+  ap24-apc-spanish-language-task-2_2B            F=2 A=2 C=2 T=3   spread=1
+  ap24-apc-spanish-language-task-2_2C            F=3 A=2 C=3 T=3   spread=1
+  ap25-apc-spanish-language-task-1_1A            F=4 A=4 C=4 T=4   spread=0
+  ap25-apc-spanish-language-task-1_1B            F=3 A=3 C=3 T=3   spread=0
+  ap25-apc-spanish-language-task-1_1C            F=3 A=2 C=2 T=2   spread=1
+  ap25-apc-spanish-language-task-2_2A            F=3 A=2 C=3 T=3   spread=1
+  ap25-apc-spanish-language-task-2_2B            F=2 A=3 C=3 T=3   spread=1
+  ap25-apc-spanish-language-task-2_2C            F=2 A=2 C=3 T=2   spread=1
+  A                                              F=3 A=4 C=4 T=4   spread=1
+  B                                              F=1 A=1 C=1 T=1   spread=0
+  C                                              F=6 A=6 C=4 T=6   spread=2
+  D                                              F=1 A=4 C=3 T=3   spread=3
+  E                                              F=1 A=1 C=1 T=2   spread=1
+  F                                              F=3 A=6 C=4 T=6   spread=3
+
+==========================================================================
+HOW MUCH DO THE FOUR CRITERIA DISAGREE?
+==========================================================================
+  mean spread across F/A/C/T : 0.88 sublevels
+  max spread                 : 3
+  A wide spread is the diagnostic signal the app is built on, but it
+  is also what makes the minimum sit far below the other three.
+
+==========================================================================
+AGGREGATION RULES vs THE TEACHER'S BLIND LABELS (calibration set)
+==========================================================================
+  rule              mean offset   inside range
+  min (shipped)           -2.33         1/6
+  median                  -1.17         3/6
+  mean                    -1.33         1/6
+  second lowest           -1.33         3/6
+  max                     -0.67         4/6
+
+==========================================================================
+AGGREGATION RULES vs ACTFL's PUBLISHED AP COMPARISON (AP set)
+==========================================================================
+  rule              mean offset    inside band
+  min (shipped)           -1.75         0/12
+  median                  -1.33         0/12
+  mean                    -1.33         0/12
+  second lowest           -1.42         0/12
+  max                     -1.17         0/12
+
+  Closest to the teacher: max (-0.67)
+
+  NOTE: a rule is only worth adopting if it is defensible under
+  ACTFL, not merely closer to the target. ACTFL places a writer
+  where all criteria are sustained, which argues for the minimum.
+  The honest reading is that the minimum is right in principle and
+  biased in practice, because it compounds four conservative reads.
+
+saved: C:\Users\key8\Desktop\AI Vibecode stuff\Final Project\output\aggregation_experiment.json

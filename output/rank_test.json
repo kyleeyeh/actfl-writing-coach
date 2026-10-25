@@ -2,10 +2,10 @@
   "by_instrument": {
     "Spanish Language [holistic_1_5]": {
       "n": 18,
-      "tau_b": 0.3665,
-      "concordant": 53,
-      "discordant": 11,
-      "tied": 103
+      "tau_b": 0.4587,
+      "concordant": 61,
+      "discordant": 7,
+      "tied": 101
     }
   },
   "n": 18,
@@ -187,17 +187,17 @@
       "score_kind": "holistic_1_5",
       "ap_score": 5,
       "content_score": null,
-      "actfl": "Novice High",
-      "actfl_rank": 2,
-      "limiting": "F",
+      "actfl": "Intermediate Low",
+      "actfl_rank": 3,
+      "limiting": "A",
       "words": 199,
       "transcription_confidence": 0.91,
       "fabricated_quotes": 0,
       "over_claims": 0,
       "injection_hits": 0,
-      "cost_usd": 0.03655,
-      "tokens": 41915,
-      "cache_hit_rate": 0.6,
+      "cost_usd": 0.03195,
+      "tokens": 36640,
+      "cache_hit_rate": 0.552,
       "prompt_reconstructed": true
     },
     {
@@ -208,15 +208,15 @@
       "content_score": null,
       "actfl": "Novice High",
       "actfl_rank": 2,
-      "limiting": "F",
+      "limiting": "A",
       "words": 139,
       "transcription_confidence": 0.27,
       "fabricated_quotes": 0,
       "over_claims": 0,
       "injection_hits": 0,
-      "cost_usd": 0.02755,
-      "tokens": 31598,
-      "cache_hit_rate": 0.634,
+      "cost_usd": 0.02781,
+      "tokens": 31887,
+      "cache_hit_rate": 0.632,
       "prompt_reconstructed": true
     },
     {
@@ -233,9 +233,9 @@
       "fabricated_quotes": 0,
       "over_claims": 0,
       "injection_hits": 0,
-      "cost_usd": 0.02539,
-      "tokens": 29119,
-      "cache_hit_rate": 0.704,
+      "cost_usd": 0.0256,
+      "tokens": 29354,
+      "cache_hit_rate": 0.7,
       "prompt_reconstructed": true
     },
     {
@@ -309,9 +309,9 @@
       "fabricated_quotes": 0,
       "over_claims": 0,
       "injection_hits": 0,
-      "cost_usd": 0.04491,
-      "tokens": 51506,
-      "cache_hit_rate": 0.636,
+      "cost_usd": 0.04527,
+      "tokens": 51920,
+      "cache_hit_rate": 0.632,
       "prompt_reconstructed": true
     },
     {
@@ -325,12 +325,12 @@
       "limiting": "F",
       "words": 391,
       "transcription_confidence": 0.25,
-      "fabricated_quotes": 1,
+      "fabricated_quotes": 0,
       "over_claims": 0,
       "injection_hits": 0,
-      "cost_usd": 0.039,
-      "tokens": 44721,
-      "cache_hit_rate": 0.667,
+      "cost_usd": 0.03944,
+      "tokens": 45226,
+      "cache_hit_rate": 0.661,
       "prompt_reconstructed": true
     },
     {
@@ -341,15 +341,15 @@
       "content_score": null,
       "actfl": "Novice High",
       "actfl_rank": 2,
-      "limiting": "F",
+      "limiting": "A",
       "words": 218,
       "transcription_confidence": 0.42,
       "fabricated_quotes": 0,
       "over_claims": 0,
       "injection_hits": 0,
-      "cost_usd": 0.02489,
-      "tokens": 28538,
-      "cache_hit_rate": 0.71,
+      "cost_usd": 0.02525,
+      "tokens": 28953,
+      "cache_hit_rate": 0.704,
       "prompt_reconstructed": true
     }
   ]
