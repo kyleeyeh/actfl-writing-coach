@@ -488,8 +488,11 @@ with tabs[1]:
     for d in res.drills.drills:
         kind = "Essay prompt" if d.kind == "essay_prompt" else "Technical drill"
         with st.expander(f"**{kind} · {d.title}**", expanded=True):
-            st.markdown("**Para el estudiante**")
-            st.write(d.instructions_es)
+            st.markdown("**For the student** (English — they are still "
+                        "learning Spanish)")
+            st.write(d.explanation_en)
+            st.markdown("**The task itself** (Spanish)")
+            st.code(d.task_es, language=None, wrap_lines=True)
             st.markdown("**Teacher note**")
             st.caption(d.teacher_note_en)
 

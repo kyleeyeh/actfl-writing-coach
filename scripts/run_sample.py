@@ -131,8 +131,9 @@ def main() -> int:
     print("=" * 72)
     for d in res.drills.drills:
         print(f"  [{d.kind}] ({d.targets_criterion}) {d.title}")
-        print(f"      es: {d.instructions_es}")
-        print(f"      en: {d.teacher_note_en}")
+        print(f"      to student (en): {d.explanation_en}")
+        print(f"      task (es)      : {d.task_es}")
+        print(f"      teacher (en)   : {d.teacher_note_en}")
 
     print("\n" + "=" * 72)
     print("GUARDRAILS")

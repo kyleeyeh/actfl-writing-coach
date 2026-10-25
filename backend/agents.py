@@ -164,9 +164,18 @@ def generate_drills(
             "Produce at least one essay_prompt and at least one "
             "technical_drill. A technical_drill is short and mechanical (a "
             "targeted conjugation set, a connector-insertion exercise, a "
-            "sentence-combining task). Write student-facing instructions in "
-            "Spanish pitched at the current level, and a teacher note in "
-            "English explaining what to look for."
+            "sentence-combining task).\n\n"
+            "LANGUAGE RULES, which matter more than they look:\n"
+            "- `explanation_en` is in ENGLISH, written to the student as "
+            "'you'. This student is still learning Spanish; an explanation "
+            "in Spanish of what is wrong with their Spanish is unreadable to "
+            "them. Say what to work on and what to watch for, plainly, in "
+            "two or three sentences. No ACTFL terminology and no level "
+            "names -- they do not need to know their level to do the work.\n"
+            "- `task_es` is the exercise itself, in SPANISH, because writing "
+            "Spanish is the point. Pitch its wording at or just below the "
+            "student's current level so they can read the instruction.\n"
+            "- `title` and `teacher_note_en` are English."
         ),
         out_model=DrillSet,
         ledger=ledger,

@@ -104,11 +104,35 @@ class Placement(BaseModel):
 
 
 class Drill(BaseModel):
-    """One piece of targeted practice."""
+    """One piece of targeted practice.
+
+    TWO LANGUAGES, ON PURPOSE
+    -------------------------
+    Everything explaining the work is in English; only the work itself is in
+    Spanish. A student placed at Novice or Intermediate cannot read a Spanish
+    explanation of what is wrong with their Spanish -- feedback they cannot
+    decode is not feedback. But the exercise has to be in Spanish, because
+    writing Spanish is the point.
+    """
 
     kind: Literal["essay_prompt", "technical_drill"]
-    title: str
-    instructions_es: str = Field(description="What the student does, in Spanish.")
+    title: str = Field(description="Short title, in English.")
+    explanation_en: str = Field(
+        description=(
+            "In ENGLISH, addressed to the student as 'you': what this "
+            "practice is for, what they are getting wrong now, and what to "
+            "watch for. Two or three plain sentences. No jargon, no ACTFL "
+            "terminology, no level names."
+        )
+    )
+    task_es: str = Field(
+        description=(
+            "The exercise itself, in SPANISH -- the essay prompt, or the "
+            "sentences to complete. This is the only Spanish in the drill. "
+            "Keep it at or just below the student's current level so the "
+            "task is readable."
+        )
+    )
     teacher_note_en: str = Field(
         description="Why this drill, and what to look for, in English."
     )
