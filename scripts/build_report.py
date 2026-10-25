@@ -328,10 +328,36 @@ def render_markdown(text: str, f: dict) -> str:
 
     text = re.sub(r"!\[(.*?)\]\((.+?)\)", fig, text)
 
-    out, in_list, in_table = [], False, False
+    out: list[str] = []
+    in_list: str | bool = False  # "ul" / "ol" / False
+    in_table = False
+    para: list[str] = []
+    # None when not in a callout, otherwise the CSS class for the open one.
+    callout: list[str | None] = [None]
+
+    def flush() -> None:
+        """Emit the buffered lines as ONE block.
+
+        The section sources are hard-wrapped at about 78 characters, so a
+        block spans several lines. Emitting one element per source line turned
+        every sentence into four stubby paragraphs and truncated every callout
+        after its first line -- both visible in the first rendered draft.
+        """
+        if not para:
+            callout[0] = None
+            return
+        body = " ".join(para)
+        para.clear()
+        if callout[0] is not None:
+            out.append(f'<div class="{callout[0]}">{body}</div>')
+            callout[0] = None
+        else:
+            out.append(f"<p>{body}</p>")
+
     for line in text.split("\n"):
         s = line.rstrip()
         if s.startswith("|") and s.endswith("|"):
+            flush()
             cells = [c.strip() for c in s.strip("|").split("|")]
             if set("".join(cells)) <= set("-: "):
                 continue
@@ -345,33 +371,63 @@ def render_markdown(text: str, f: dict) -> str:
             out.append("</table>")
             in_table = False
 
-        if s.startswith("- "):
+        # Bulleted and numbered lists. Without the numbered case, "1." to
+        # "4." ran together into one unreadable paragraph.
+        bullet = s.startswith("- ")
+        numbered = bool(re.match(r"\d+\.\s", s))
+        if bullet or numbered:
+            want = "ul" if bullet else "ol"
+            if in_list and in_list != want:
+                out.append(f"</{in_list}>")
+                in_list = False
+            flush()
             if not in_list:
-                out.append("<ul>")
-                in_list = True
-            out.append(f"<li>{s[2:]}</li>")
+                out.append(f"<{want}>")
+                in_list = want
+            item = s[2:] if bullet else re.sub(r"^\d+\.\s+", "", s)
+            out.append(f"<li>{item}</li>")
+            continue
+        if in_list and s.startswith("  ") and s.strip():
+            # Wrapped continuation of the item above, not a new one.
+            out[-1] = out[-1][: -len("</li>")] + " " + s.strip() + "</li>"
             continue
         if in_list:
-            out.append("</ul>")
+            out.append(f"</{in_list}>")
             in_list = False
 
         if s.startswith("### "):
+            flush()
             out.append(f"<h3>{s[4:]}</h3>")
         elif s.startswith("> "):
+            flush()
             out.append(f"<blockquote>{s[2:]}</blockquote>")
         elif s.startswith("!! "):
-            out.append(f'<div class="callout warn">{s[3:]}</div>')
-        elif s.startswith("!"):
-            out.append(f'<div class="callout">{s[1:].strip()}</div>')
+            flush()
+            callout[0] = "callout warn"
+            para.append(s[3:])
+        elif s.startswith("<figure") or s.startswith('<div class="todo'):
+            flush()
+            out.append(s)
+        elif s.startswith("! "):
+            flush()
+            callout[0] = "callout"
+            para.append(s[2:].strip())
         elif s:
-            out.append(f"<p>{s}</p>")
+            para.append(s)
+        else:
+            flush()
+    flush()
     if in_list:
-        out.append("</ul>")
+        out.append(f"</{in_list}>")
     if in_table:
         out.append("</table>")
 
     html = "\n".join(out)
     html = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", html)
+    # Single asterisks are italics. Must run after bold, must not span a tag
+    # boundary or a newline, or one unbalanced asterisk italicises half the
+    # document.
+    html = re.sub(r"(?<![\w*])\*([^*<>\n]{1,200}?)\*(?![\w*])", r"<i>\1</i>", html)
     html = re.sub(r"`(.+?)`", r"<code>\1</code>", html)
     return html
 
