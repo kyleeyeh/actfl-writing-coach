@@ -37,6 +37,28 @@ REQUEST_TIMEOUT_S = 90.0
 _client: OpenAI | None = None
 
 
+class ContentFiltered(RuntimeError):
+    """The provider's content filter refused the request.
+
+    Seen on a perfectly ordinary handwritten composition about a student's
+    family. The filter sits between us and the model and will occasionally
+    refuse real student work, so this is a condition the app has to survive
+    and explain rather than a crash. Callers that have an alternative to try
+    -- a different page rotation, for instance -- can catch this and move on.
+    """
+
+
+def _as_filtered(exc: Exception) -> Exception:
+    text = str(exc)
+    if "content_filter" in text or "content management policy" in text:
+        return ContentFiltered(
+            "The provider's content filter refused this image or text. This "
+            "can happen on legitimate student work; it is a provider policy "
+            "decision, not a judgement about the composition."
+        )
+    return exc
+
+
 def client() -> OpenAI:
     global _client
     if _client is None:
@@ -90,13 +112,16 @@ def call_json(
     def _once(extra: str | None = None) -> tuple[str, object]:
         msgs = messages if extra is None else [*messages, {"role": "user", "content": extra}]
         started = time.time()
-        resp = client().chat.completions.create(
-            model=MODEL,
-            messages=msgs,
-            max_completion_tokens=MAX_COMPLETION_TOKENS,
-            reasoning_effort="none",
-            response_format={"type": "json_object"},
-        )
+        try:
+            resp = client().chat.completions.create(
+                model=MODEL,
+                messages=msgs,
+                max_completion_tokens=MAX_COMPLETION_TOKENS,
+                reasoning_effort="none",
+                response_format={"type": "json_object"},
+            )
+        except Exception as exc:  # noqa: BLE001 -- re-raised, possibly retyped
+            raise _as_filtered(exc) from exc
         ledger.record(agent, resp.model, resp.usage, time.time() - started)
         return (resp.choices[0].message.content or "").strip(), resp
 

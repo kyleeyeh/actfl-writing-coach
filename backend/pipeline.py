@@ -26,6 +26,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from backend import agents, guardrails
+from backend.client import ContentFiltered
 from backend.schemas import CriterionFinding, DrillSet, Placement, Transcription
 from backend.usage import Ledger
 
@@ -45,6 +46,8 @@ class TraceStep:
 class RunResult:
     transcript: Transcription | None = None
     transcript_text: str = ""          # may be human-corrected
+    rotation_applied: int = 0
+    orientation_attempts: list = field(default_factory=list)
     human_edited: bool = False
     findings: list[CriterionFinding] = field(default_factory=list)
     placement: Placement | None = None
@@ -60,16 +63,52 @@ class RunResult:
         return not self.over_claims and all(q.found for q in self.quote_checks)
 
 
-def transcribe_step(*, image_data_url: str, res: RunResult) -> RunResult:
-    """Read the image and scan it for injected instructions. No grading yet."""
+def transcribe_step(
+    *,
+    image_data_url: str | list[str] | None = None,
+    raw_images: list[bytes] | None = None,
+    rotation: int = 0,
+    res: RunResult,
+) -> RunResult:
+    """Read the image and scan it for injected instructions. No grading yet.
+
+    `rotation` is applied to every page before transcription and is expected
+    to come from a human who looked at the image. It is deliberately NOT
+    inferred from the model's confidence: on a real control sheet, two of the
+    four rotations produced entirely fabricated compositions at confidence
+    0.98, while the correct orientation scored 0.83. See backend/imaging.py.
+    """
     t0 = time.time()
-    res.transcript = agents.transcribe(image_data_url=image_data_url, ledger=res.ledger)
+
+    if raw_images:
+        from backend import imaging
+
+        urls = [
+            imaging.Candidate(
+                image=imaging.rotate(imaging.load(r), rotation),
+                rotation=rotation,
+                score=0.0,
+            ).data_url()
+            for r in raw_images
+        ]
+        res.rotation_applied = rotation % 360
+        res.transcript = agents.transcribe(image_data_url=urls, ledger=res.ledger)
+    else:
+        res.transcript = agents.transcribe(
+            image_data_url=image_data_url, ledger=res.ledger
+        )
+
     res.transcript_text = res.transcript.text
+    rot_note = (
+        f", rotated {res.rotation_applied}°"
+        if getattr(res, "rotation_applied", 0)
+        else ""
+    )
     res.trace.append(
         TraceStep(
             "transcriber",
             f"{len(res.transcript.text.split())} words, "
-            f"confidence {res.transcript.confidence:.2f}"
+            f"confidence {res.transcript.confidence:.2f}" + rot_note
             + (
                 f", {len(res.transcript.illegible_spans)} illegible"
                 if res.transcript.illegible_spans
@@ -205,12 +244,19 @@ def assess_step(
 
 def run(
     *,
-    image_data_url: str,
-    prompt_text: str,
+    image_data_url: str | list[str] | None = None,
+    raw_images: list[bytes] | None = None,
+    rotation: int = 0,
+    prompt_text: str = "",
     parallel: bool = True,
     label: str = "run",
 ) -> RunResult:
     """Full pipeline, no human in the loop. Used by the CLI and the harness."""
     res = RunResult(ledger=Ledger(label=label))
-    transcribe_step(image_data_url=image_data_url, res=res)
+    transcribe_step(
+        image_data_url=image_data_url,
+        raw_images=raw_images,
+        rotation=rotation,
+        res=res,
+    )
     return assess_step(prompt_text=prompt_text, res=res, parallel=parallel)

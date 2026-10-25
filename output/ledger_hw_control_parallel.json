@@ -1,0 +1,76 @@
+{
+  "label": "hw_control",
+  "calls": 7,
+  "prompt_tokens": 25258,
+  "cached_tokens": 18779,
+  "uncached_prompt_tokens": 6479,
+  "completion_tokens": 1602,
+  "cache_hit_rate": 0.7435,
+  "cost_usd": 0.023422,
+  "wall_seconds": 14.39,
+  "per_agent": [
+    {
+      "agent": "transcriber",
+      "model": "gpt-6-luna-2026-09-22",
+      "prompt_tokens": 6060,
+      "cached_tokens": 1792,
+      "completion_tokens": 76,
+      "seconds": 1.8406813144683838,
+      "cost_usd": 0.005351
+    },
+    {
+      "agent": "eval_T",
+      "model": "gpt-6-luna-2026-09-22",
+      "prompt_tokens": 3125,
+      "cached_tokens": 2907,
+      "completion_tokens": 213,
+      "seconds": 2.7463126182556152,
+      "cost_usd": 0.002911
+    },
+    {
+      "agent": "eval_F",
+      "model": "gpt-6-luna-2026-09-22",
+      "prompt_tokens": 3126,
+      "cached_tokens": 2907,
+      "completion_tokens": 273,
+      "seconds": 3.0569984912872314,
+      "cost_usd": 0.002964
+    },
+    {
+      "agent": "eval_C",
+      "model": "gpt-6-luna-2026-09-22",
+      "prompt_tokens": 3126,
+      "cached_tokens": 2907,
+      "completion_tokens": 221,
+      "seconds": 3.045478582382202,
+      "cost_usd": 0.002919
+    },
+    {
+      "agent": "eval_A",
+      "model": "gpt-6-luna-2026-09-22",
+      "prompt_tokens": 3124,
+      "cached_tokens": 2907,
+      "completion_tokens": 363,
+      "seconds": 3.970318555831909,
+      "cost_usd": 0.003041
+    },
+    {
+      "agent": "adjudicator",
+      "model": "gpt-6-luna-2026-09-22",
+      "prompt_tokens": 3554,
+      "cached_tokens": 2671,
+      "completion_tokens": 152,
+      "seconds": 2.2447752952575684,
+      "cost_usd": 0.003232
+    },
+    {
+      "agent": "drill_generator",
+      "model": "gpt-6-luna-2026-09-22",
+      "prompt_tokens": 3143,
+      "cached_tokens": 2688,
+      "completion_tokens": 304,
+      "seconds": 5.523675918579102,
+      "cost_usd": 0.003006
+    }
+  ]
+}

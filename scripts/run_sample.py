@@ -24,6 +24,20 @@ from app.config import OUTPUT_DIR, PRICING_IS_PLACEHOLDER, SAMPLES_DIR  # noqa: 
 from backend import pipeline  # noqa: E402
 
 
+def _sample_prompt(manifest: dict, sample_id: str) -> str:
+    """Per-sample prompt if the manifest carries one, else the shared one.
+
+    The handwritten samples answer a self-introduction prompt rather than the
+    vacation prompt the rendered fixtures use, and grading a composition
+    against the wrong assignment marks down Functions and tasks for a task
+    that was never set.
+    """
+    for s in manifest["samples"]:
+        if s["id"] == sample_id and s.get("prompt"):
+            return s["prompt"]
+    return manifest["prompt_es"]
+
+
 def data_url(path: Path) -> str:
     mime = mimetypes.guess_type(path.name)[0] or "image/png"
     return f"data:{mime};base64," + base64.b64encode(path.read_bytes()).decode()
@@ -32,6 +46,13 @@ def data_url(path: Path) -> str:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("sample", help="sample id, e.g. sample_02")
+    ap.add_argument(
+        "--rotate",
+        type=int,
+        default=None,
+        help="degrees to rotate the page before reading; omit to use the "
+             "detected axis (the app will tell you if it is unsure)",
+    )
     ap.add_argument(
         "--serial",
         action="store_true",
@@ -46,10 +67,25 @@ def main() -> int:
         print("Available:", ", ".join(s["id"] for s in manifest["samples"]))
         return 1
 
-    print(f"Running {args.sample} ...\n")
+    raw = img.read_bytes()
+    if args.rotate is None:
+        from backend import imaging
+
+        cands, scores = imaging.suggest_rotations(raw)
+        rotation = cands[0]
+        if not imaging.axis_is_clear(scores):
+            print(
+                f"  ! page orientation is unclear (scores {scores}). Using "
+                f"{rotation} degrees; pass --rotate if the transcript looks wrong."
+            )
+    else:
+        rotation = args.rotate
+
+    print(f"Running {args.sample} at rotation {rotation} degrees ...\n")
     res = pipeline.run(
-        image_data_url=data_url(img),
-        prompt_text=manifest["prompt_es"],
+        raw_images=[raw],
+        rotation=rotation,
+        prompt_text=_sample_prompt(manifest, args.sample),
         parallel=not args.serial,
         label=args.sample,
     )
