@@ -48,10 +48,21 @@ def _plain(obj: Any) -> Any:
     return str(obj)
 
 
-def save(res, *, student: str, assignment: str, source: str = "") -> Path:
-    """Persist one assessment. Returns the file written."""
+def save(
+    res,
+    *,
+    student: str,
+    assignment: str,
+    source: str = "",
+    when: datetime | None = None,
+) -> Path:
+    """Persist one assessment. Returns the file written.
+
+    `when` backdates the record. It exists so a demonstration history can
+    be seeded across several weeks; real use leaves it unset.
+    """
     RUNS.mkdir(parents=True, exist_ok=True)
-    now = datetime.now()
+    now = when or datetime.now()
     path = RUNS / f"{now:%Y%m%d-%H%M%S}_{_safe(student)}.json"
 
     payload = {

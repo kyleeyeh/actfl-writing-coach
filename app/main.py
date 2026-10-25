@@ -33,12 +33,19 @@ from app.config import (  # noqa: E402
     PRICING_IS_BLENDED,
     SAMPLES_DIR,
 )
-from backend import handout, imaging, pipeline, store  # noqa: E402
+from backend import handout, imaging, pipeline, progress, scale, store  # noqa: E402
 from backend.client import ContentFiltered  # noqa: E402
 from backend.usage import Ledger  # noqa: E402
 import json  # noqa: E402
 
-st.set_page_config(page_title="ACTFL Writing Coach", page_icon="✎", layout="wide")
+st.set_page_config(
+    page_title="ACTFL Writing Coach",
+    page_icon="✎",
+    layout="wide",
+    # Everything that starts a task lives in the sidebar, so collapsing
+    # it by default hides the way in.
+    initial_sidebar_state="expanded",
+)
 
 CRITERION_LABEL = {
     "F": "Functions & tasks",
@@ -85,7 +92,19 @@ def reset() -> None:
 st.sidebar.title("✎ Writing Coach")
 st.sidebar.caption(f"ACTFL 2024 · Writing · {MODEL}")
 
-view = st.sidebar.radio("", ["Assess", "History"], horizontal=True, label_visibility="collapsed")
+VIEWS = ["Assess", "Progress", "History"]
+# The view is mirrored in the URL so a teacher can bookmark the progress
+# screen, and so it can be opened directly rather than only by clicking.
+_q = st.query_params.get("view", "Assess")
+view = st.sidebar.radio(
+    "View",
+    VIEWS,
+    index=VIEWS.index(_q) if _q in VIEWS else 0,
+    horizontal=True,
+    label_visibility="collapsed",
+)
+if st.query_params.get("view") != view:
+    st.query_params["view"] = view
 
 mf = manifest()
 
@@ -127,6 +146,121 @@ if view == "Assess":
     if st.sidebar.button("Start over", use_container_width=True):
         reset()
         st.rerun()
+
+# --------------------------------------------------------------------------
+# Progress view -- one student across submissions
+# --------------------------------------------------------------------------
+if view == "Progress":
+    st.title("Progress")
+    st.caption(
+        "A single composition cannot establish an ACTFL rating. Several, "
+        "over time, can show whether the gap the app named actually closed — "
+        "which is the question a teacher is really asking."
+    )
+    names = store.students()
+    if not names:
+        st.info("No saved assessments yet.")
+        st.stop()
+
+    who = st.selectbox("Student", names)
+    s = progress.summary(who)
+    if not s["enough"]:
+        st.info(
+            f"{who} has {len(s['points'])} saved assessment(s). "
+            "At least two are needed to show movement."
+        )
+        st.stop()
+
+    first, last = s["first"], s["last"]
+    m = st.columns(4)
+    m[0].metric("Submissions", s["n"])
+    m[1].metric(
+        "Sublevels moved",
+        f"{s['overall_delta']:+d}",
+        delta=f"{first.overall} → {last.overall}",
+    )
+    m[2].metric(
+        "Targeted gaps closed", f"{s['closed_count']}/{s['targeted_count']}"
+    )
+    # Short form: the full criterion name truncates in a narrow metric.
+    SHORT = {"F": "Functions", "A": "Accuracy", "C": "Content", "T": "Text type"}
+    m[3].metric("Bottleneck now", SHORT.get(last.limiting, last.limiting or "?"))
+
+    st.warning(
+        "**Read these as the app's own movement, not as certified progress.** "
+        "The app places about 1.5–2 sublevels low. A roughly constant bias "
+        "largely cancels when you subtract two measurements taken the same "
+        "way, which is why change is more trustworthy here than level — but "
+        "the bias widens at higher proficiency, so a student improving across "
+        "that range will have their gain understated."
+    )
+
+    import pandas as pd
+
+    rows = progress.chart_rows(s["points"])
+    df = pd.DataFrame(
+        {CRITERION_LABEL[c]: rows[c] for c in progress.CRITERIA},
+        index=[p.saved_at[:10] for p in s["points"]],
+    )
+    st.line_chart(df, height=300)
+    st.caption(
+        "Vertical axis is the ACTFL sublevel ladder: "
+        + ", ".join(
+            f"{i}={scale.label(*scale.ORDER[i])}" for i in range(0, 7)
+        )
+        + " …"
+    )
+
+    st.subheader("What changed, step by step")
+    for i, step in enumerate(s["steps"], 1):
+        before, after = s["points"][i - 1], s["points"][i]
+        targeted = next((mv for mv in step if mv.was_limiting), None)
+        if targeted is None:
+            verdict = "No criterion was flagged as limiting in the earlier run."
+        elif targeted.closed:
+            verdict = (
+                f"**The targeted gap closed.** "
+                f"{CRITERION_LABEL[targeted.criterion]} was the bottleneck and "
+                f"moved {targeted.before} → {targeted.after}."
+            )
+        else:
+            verdict = (
+                f"**The targeted gap did not move.** "
+                f"{CRITERION_LABEL[targeted.criterion]} was the bottleneck and "
+                f"stayed at {targeted.before}."
+            )
+        with st.expander(
+            f"{before.saved_at[:10]} → {after.saved_at[:10]} · "
+            f"{before.overall} → {after.overall}",
+            expanded=(i == len(s["steps"])),
+        ):
+            st.markdown(verdict)
+            cols = st.columns(4)
+            short = {"F": "Functions", "A": "Accuracy", "C": "Content",
+                     "T": "Text type"}
+            for col, mv in zip(cols, step):
+                col.metric(
+                    short[mv.criterion] + (" ★" if mv.was_limiting else ""),
+                    mv.after,
+                    delta=f"{mv.delta:+d}" if mv.delta else "no change",
+                )
+            st.caption("★ marks the criterion the previous drills targeted.")
+
+    if s["bottleneck_moved"]:
+        st.success(
+            f"The bottleneck moved from "
+            f"{CRITERION_LABEL.get(first.limiting, first.limiting)} to "
+            f"{CRITERION_LABEL.get(last.limiting, last.limiting)}. A bottleneck "
+            "that shifts is usually good news: the old constraint stopped "
+            "being the binding one."
+        )
+    else:
+        st.info(
+            f"{CRITERION_LABEL.get(last.limiting, last.limiting)} has been the "
+            f"bottleneck throughout. If the practice is not shifting it, the "
+            "drills for this criterion are the thing to change."
+        )
+    st.stop()
 
 # --------------------------------------------------------------------------
 # History view
