@@ -30,3 +30,6 @@ data/ap_pdfs/
 # Rendered College Board pages: ~27MB and their copyright, not ours.
 # Regenerate with scripts/fetch_ap.py then scripts/ingest_ap.py.
 data/ap_samples/
+
+# Saved assessments contain student work and names; local only.
+output/runs/
