@@ -58,21 +58,79 @@ CRITERION_LABEL = {
 st.markdown(
     """
     <style>
-      .block-container {padding-top: 2rem; max-width: 1240px;}
-      .levelcard {background:#0f1b2d;color:#fff;padding:1.1rem 1.4rem;
-                  border-radius:12px;margin-bottom:.5rem;}
-      .levelcard h2 {margin:0;font-size:1.7rem;color:#fff;}
-      .levelcard p  {margin:.25rem 0 0;opacity:.78;font-size:.9rem;}
-      .pill {display:inline-block;padding:.12rem .6rem;border-radius:999px;
-             font-size:.72rem;font-weight:600;margin-right:.35rem;}
-      .ok{background:#dcfce7;color:#14532d;} .warn{background:#fee2e2;color:#7f1d1d;}
-      .muted{color:#64748b;font-size:.84rem;}
-      .quote{border-left:3px solid #94a3b8;padding-left:.7rem;color:#334155;
-             font-style:italic;margin:.3rem 0;}
+      :root{
+        --ink:#121c2b; --muted:#64748b; --line:#e3e9f0;
+        --accent:#15497a; --accent-soft:#eef4fa;
+        --good:#15803d; --good-soft:#e8f6ed;
+        --bad:#b42318;  --bad-soft:#fdeceb;
+      }
+      .block-container{padding-top:1.4rem; max-width:1280px;}
+
+      /* Streamlit's default heading sizes are tuned for dashboards, not for
+         a document a teacher reads top to bottom. */
+      h1{font-size:2.05rem!important; letter-spacing:-.02em; color:var(--ink);}
+      h2{font-size:1.25rem!important; letter-spacing:-.01em;}
+      h3{font-size:1.05rem!important;}
+
+      section[data-testid="stSidebar"]{background:#f7f9fc;
+        border-right:1px solid var(--line);}
+      section[data-testid="stSidebar"] .block-container{padding-top:1.2rem;}
+
+      /* The headline placement. */
+      .levelcard{background:linear-gradient(135deg,#102236 0%,#1b3a5c 100%);
+        color:#fff; padding:1.15rem 1.4rem; border-radius:14px;
+        margin-bottom:.55rem; box-shadow:0 6px 18px rgba(16,34,54,.18);}
+      .levelcard h2{margin:0!important; font-size:1.75rem!important; color:#fff;
+        letter-spacing:-.02em;}
+      .levelcard p{margin:.3rem 0 0; opacity:.82; font-size:.9rem;}
+
+      /* Step indicator: three stages, and the middle one is a safety
+         control, so it should be obvious where you are. */
+      .steps{display:flex; gap:.4rem; margin:.1rem 0 1rem;}
+      .step{flex:1; font-size:.72rem; font-weight:600; letter-spacing:.03em;
+        text-transform:uppercase; color:var(--muted); padding:.42rem .6rem;
+        border-radius:7px; background:#f2f5f9; border:1px solid var(--line);
+        text-align:center;}
+      .step.on{background:var(--accent); border-color:var(--accent); color:#fff;}
+      .step.done{background:var(--good-soft); border-color:#bfe3cc;
+        color:var(--good);}
+
+      .pill{display:inline-block; padding:.2rem .66rem; border-radius:999px;
+        font-size:.72rem; font-weight:600; margin:0 .35rem .3rem 0;
+        border:1px solid transparent;}
+      .ok{background:var(--good-soft); color:var(--good); border-color:#bfe3cc;}
+      .warn{background:var(--bad-soft); color:var(--bad); border-color:#f3c9c5;}
+
+      .muted{color:var(--muted); font-size:.84rem; line-height:1.5;}
+      .quote{border-left:3px solid var(--accent); padding:.15rem 0 .15rem .75rem;
+        color:#31425a; font-style:italic; margin:.45rem 0 .2rem;}
+
+      /* Expanders carry most of the content; soften the default chrome. */
+      div[data-testid="stExpander"]{border:1px solid var(--line);
+        border-radius:10px; margin-bottom:.5rem; background:#fff;}
+      div[data-testid="stExpander"] summary{font-size:.93rem;}
+
+      div[data-testid="stMetricValue"]{font-size:1.5rem; letter-spacing:-.02em;}
+      div[data-testid="stMetricLabel"]{color:var(--muted);}
+
+      .stTabs [data-baseweb="tab"]{font-size:.9rem; padding:.35rem .1rem;}
+      .stTabs [data-baseweb="tab-list"]{gap:1.3rem;}
+
+      .stButton button{border-radius:8px; font-weight:600;}
     </style>
     """,
     unsafe_allow_html=True,
 )
+
+
+def stepper(active: int) -> None:
+    """Show which of the three stages the teacher is in."""
+    names = ["1 · Read the page", "2 · Check the transcript", "3 · Assessment"]
+    cells = []
+    for i, name in enumerate(names, 1):
+        cls = "step on" if i == active else ("step done" if i < active else "step")
+        cells.append(f'<div class="{cls}">{name}</div>')
+    st.markdown(f'<div class="steps">{"".join(cells)}</div>', unsafe_allow_html=True)
 
 
 def manifest() -> dict:
@@ -335,7 +393,9 @@ with left:
         use_container_width=True,
     )
     c1, c2, c3 = st.columns(3)
-    for col, label, delta in ((c1, "↺ 90°", -90), (c2, "↻ 90°", 90), (c3, "↕ 180°", 180)):
+    # Short labels: the three buttons share a narrow column and "180°" with
+    # a symbol in front of it truncates to "1...".
+    for col, label, delta in ((c1, "↺ 90", -90), (c2, "↻ 90", 90), (c3, "Flip", 180)):
         if col.button(label, use_container_width=True):
             st.session_state.rotation = (rotation + delta) % 360
             st.session_state.manual_rotation = st.session_state.rotation
@@ -353,7 +413,8 @@ stage = st.session_state.get("stage", "new")
 with right:
     # --- stage 1 ----------------------------------------------------------
     if stage == "new":
-        st.subheader("Step 1 · Read the handwriting")
+        stepper(1)
+        st.subheader("Read the handwriting")
         st.markdown(
             '<span class="muted">The transcription is deliberately literal: '
             "spelling errors, missing accents and wrong verb forms are kept "
@@ -390,7 +451,8 @@ with right:
     # --- stage 2 ----------------------------------------------------------
     elif stage == "confirm":
         res = st.session_state.res
-        st.subheader("Step 2 · Check the transcript")
+        stepper(2)
+        st.subheader("Check the transcript")
         st.markdown(
             '<span class="muted">Read this against the image, line by line. '
             "Two measured failures make this step load-bearing: "
@@ -452,6 +514,7 @@ with right:
     else:
         res = st.session_state.res
         p = res.placement
+        stepper(3)
         st.markdown(
             f'<div class="levelcard"><h2>Consistent with '
             f"{p.consistent_with_level} {p.consistent_with_sublevel or ''}</h2>"
