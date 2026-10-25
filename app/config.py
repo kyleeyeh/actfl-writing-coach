@@ -47,6 +47,36 @@ RUBRIC_DIR = ROOT / "rubric"
 SAMPLES_DIR = ROOT / "data" / "samples"
 OUTPUT_DIR = ROOT / "output"
 
+# --- Calibration ------------------------------------------------------------
+# Inject expert-labelled example compositions into every evaluator prompt.
+#
+# Measured without them, the app places ~1.5 ACTFL sublevels below expert
+# raters. Descriptor prose alone gives the model nothing to compare a sample
+# against, so it finds reasons the writing is not yet at the next rung and
+# settles low. Anchors are the standard remedy.
+#
+# MEASURED, AND TURNED OFF. On the 18 held-out AP samples, anchors bought
+# 0.33 sublevels of calibration (-1.75 -> -1.42, still nowhere near zero) and
+# cost more than they bought:
+#
+#                       without anchors   with anchors
+#   mean offset              -1.75           -1.42
+#   inside expected band      0/12            1/12
+#   Kendall tau-b           +0.459          +0.432
+#   discordant pairs             7              12
+#   fabricated quotes            0               4
+#   cost per run              $0.029          $0.032
+#
+# The fabrications were not quotes lifted from the anchors -- they were
+# invented sentences that fit the topic -- so the longer prompt simply made
+# the evaluators sloppier about quoting verbatim.
+#
+# Trading ordering quality and quote fidelity for a small improvement in a
+# number the app explicitly tells people not to rely on is a bad trade: this
+# tool is used for ranking and diagnosis, and anchors degrade both. Off by
+# default. Set True to reproduce the experiment.
+USE_ANCHORS = False
+
 # --- Pricing ---------------------------------------------------------------
 # USD per 1,000,000 tokens.
 #

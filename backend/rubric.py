@@ -19,7 +19,7 @@ from __future__ import annotations
 import json
 from functools import lru_cache
 
-from app.config import RUBRIC_DIR
+from app.config import RUBRIC_DIR, USE_ANCHORS
 
 
 @lru_cache(maxsize=1)
@@ -58,6 +58,9 @@ def static_prefix() -> str:
             out.append(f"\n### {level} {sub}")
             out.append(text)
 
+    if USE_ANCHORS:
+        out += _anchor_block()
+
     out += [
         "",
         "=== VALIDITY CONSTRAINT (binding) ===",
@@ -78,3 +81,41 @@ def static_prefix() -> str:
 def prefix_char_count() -> int:
     """Handy for the report: how big the cached region actually is."""
     return len(static_prefix())
+
+
+def _anchor_block() -> list[str]:
+    """Worked examples placed at known levels by a human expert.
+
+    These sit inside the cached prefix like the descriptors, so they are
+    paid for once per session rather than once per call.
+
+    The labels are one former Spanish teacher's blind judgements on six
+    short compositions. They calibrate; they do not define the standard,
+    and the prompt says so, because a model told these are authoritative
+    would start matching samples to them rather than to ACTFL.
+    """
+    path = RUBRIC_DIR / "anchors.json"
+    if not path.exists():
+        return []
+    data = json.loads(path.read_text(encoding="utf-8"))
+    lines = [
+        "",
+        "=== CALIBRATION EXAMPLES ===",
+        "Six compositions on the same prompt, each placed by an experienced "
+        "Spanish teacher reading blind. Use them to calibrate how much a "
+        "sample has to show before it reaches a given level. They are one "
+        "rater's judgement on short samples, so treat them as reference "
+        "points, not as the standard: the descriptors above remain the "
+        "standard.",
+        "",
+        "A common failure is to under-place: to notice what a sample does "
+        "NOT yet do and settle a rung low. Compare against these examples "
+        "before deciding.",
+    ]
+    for a in data["anchors"]:
+        lines += [
+            "",
+            f"--- Placed at {a['level']} (rater's range: {a['rater_range']}) ---",
+            a["text"],
+        ]
+    return lines

@@ -1,0 +1,48 @@
+{
+  "source": "Blind judgements by a former high-school Spanish teacher, made before any output from this app existed.",
+  "caveat": "One expert's opinion on six short compositions, not a certified ACTFL rating. Used to calibrate, not to verify.",
+  "anchors": [
+    {
+      "id": "B",
+      "level": "Novice High",
+      "rater_range": "Novice Mid–Novice High",
+      "words": 18,
+      "text": "Hola. Me llamo Diego. Yo tengo 16 anos. Mi casa es en Chicago. Me gusta futbol y pizza."
+    },
+    {
+      "id": "E",
+      "level": "Novice High",
+      "rater_range": "Novice High–Intermediate Low",
+      "words": 36,
+      "text": "Hola, me llamo Mateo y tengo quince años. Yo vivo en Houston con mi familia. Mi madre es simpatica y mi padre es alto. Me gusta jugar videojuegos y escuchar musica. No me gusta la tarea."
+    },
+    {
+      "id": "D",
+      "level": "Intermediate Low",
+      "rater_range": "Intermediate Low–Intermediate Mid",
+      "words": 60,
+      "text": "Me llamo Andrés y tengo dieciséis años. Vivo en una casa pequeña en Phoenix con mi mamá, mi papá y mi hermana. Mi hermana se llama Lucía y ella es muy comica pero a veces es molestosa. Yo soy alto y delgado, y mis amigos dicen que soy generoso. Me gusta mucho el basquetbol pero no me gustan las matematicas."
+    },
+    {
+      "id": "A",
+      "level": "Intermediate Mid",
+      "rater_range": "Intermediate Mid–Intermediate High",
+      "words": 79,
+      "text": "Me llamo Santiago, tengo diecisiete años y vivo en Denver, Colorado. Soy una persona tranquila y paciente, aunque mis amigos dicen que hablo demasiado cuando estoy nervioso. Vivo con mis padres y mi hermano menor, que tiene nueve años y siempre quiere jugar conmigo. Me encanta tocar la guitarra y los fines de semana practico con mi mejor amigo Tomás, que es muy divertido. No me gusta levantarme temprano, pero el año […]"
+    },
+    {
+      "id": "F",
+      "level": "Advanced Mid",
+      "rater_range": "Advanced Mid",
+      "words": 97,
+      "text": "Me llamo Emilio y tengo diecisiete años; vivo en las afueras de Seattle desde que mi familia se mudó allí hace seis años. Soy bastante reservado al principio, pero cuando conozco bien a alguien me vuelvo hablador y bromista. En mi casa somos cuatro: mis padres, mi hermana mayor Valentina, que estudia enfermería, y yo. Lo que más me gusta es cocinar con mi abuela, porque ella me enseña recetas que aprendió en México […]"
+    },
+    {
+      "id": "C",
+      "level": "Advanced High",
+      "rater_range": "Advanced High",
+      "words": 127,
+      "text": "Me llamo Nicolás, tengo dieciocho años y vivo en Austin, aunque nací en Monterrey y pasé allí los primeros seis años de mi vida. Siempre me han descrito como alguien observador y testarudo: cuando me propongo algo, no lo suelto hasta terminarlo, lo cual a veces frustra a mi madre. Mi familia es pequeña pero unida; mi padre trabaja como mecánico, mi madre es enfermera, y los tres cenamos juntos casi todas las noches. […]"
+    }
+  ]
+}
