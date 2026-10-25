@@ -48,6 +48,7 @@ class RunResult:
     transcript_text: str = ""          # may be human-corrected
     rotation_applied: int = 0
     orientation_attempts: list = field(default_factory=list)
+    unreadable: bool = False
     human_edited: bool = False
     findings: list[CriterionFinding] = field(default_factory=list)
     placement: Placement | None = None
@@ -63,42 +64,95 @@ class RunResult:
         return not self.over_claims and all(q.found for q in self.quote_checks)
 
 
+def _readable(t) -> bool:
+    """Did the model actually read the page, or abstain?
+
+    Abstention is "[ilegible]" with confidence 0.0. Confidence alone is not
+    the test: a genuinely difficult but real page came back at 0.15, so a
+    threshold high enough to exclude abstentions would also throw away hard
+    real scans.
+    """
+    text = (t.text or "").strip().lower()
+    words = len(text.split())
+    if words < 8 and ("ilegible" in text or "illegible" in text or not text):
+        return False
+    return words >= 8
+
+
 def transcribe_step(
     *,
     image_data_url: str | list[str] | None = None,
     raw_images: list[bytes] | None = None,
-    rotation: int = 0,
+    rotation: int | None = None,
     res: RunResult,
 ) -> RunResult:
     """Read the image and scan it for injected instructions. No grading yet.
 
-    `rotation` is applied to every page before transcription and is expected
-    to come from a human who looked at the image. It is deliberately NOT
-    inferred from the model's confidence: on a real control sheet, two of the
-    four rotations produced entirely fabricated compositions at confidence
-    0.98, while the correct orientation scored 0.83. See backend/imaging.py.
+    With `rotation=None` the orientation is found automatically: candidate
+    rotations are tried, best-guess first, until the model reports it could
+    actually read one.
+
+    That loop was tried once before and abandoned, because the model would
+    invent a fluent composition for an unreadable page and report confidence
+    0.98 -- so "it read something" meant nothing. Giving the transcriber
+    explicit permission to answer "[ilegible]" fixed that: on the page that
+    exposed the problem, it now abstains on all three unreadable rotations
+    and reads the correct one. Abstention is what makes this loop safe.
+
+    An explicit `rotation` skips the search, which is what the UI's rotate
+    buttons pass.
     """
     t0 = time.time()
 
     if raw_images:
         from backend import imaging
 
-        urls = [
-            imaging.Candidate(
-                image=imaging.rotate(imaging.load(r), rotation),
-                rotation=rotation,
-                score=0.0,
-            ).data_url()
-            for r in raw_images
-        ]
-        res.rotation_applied = rotation % 360
-        res.transcript = agents.transcribe(image_data_url=urls, ledger=res.ledger)
+        if rotation is not None:
+            urls = [
+                imaging.Candidate(
+                    image=imaging.rotate(imaging.load(r), rotation),
+                    rotation=rotation, score=0.0,
+                ).data_url()
+                for r in raw_images
+            ]
+            res.rotation_applied = rotation % 360
+            res.transcript = agents.transcribe(image_data_url=urls, ledger=res.ledger)
+        else:
+            preferred, _scores = imaging.suggest_rotations(raw_images[0])
+            others = [r for r in (0, 90, 180, 270) if r not in preferred]
+            best = None
+            for rot in preferred + others:
+                urls = [
+                    imaging.Candidate(
+                        image=imaging.rotate(imaging.load(r), rot),
+                        rotation=rot, score=0.0,
+                    ).data_url()
+                    for r in raw_images
+                ]
+                try:
+                    t = agents.transcribe(image_data_url=urls, ledger=res.ledger)
+                except ContentFiltered:
+                    res.orientation_attempts.append((rot, "filtered"))
+                    continue
+                res.orientation_attempts.append((rot, round(t.confidence, 2)))
+                if best is None or t.confidence > best[0].confidence:
+                    best = (t, rot)
+                if _readable(t):
+                    break
+            if best is None:
+                raise ContentFiltered(
+                    "Every orientation of this page was refused by the "
+                    "provider's content filter. Try a re-photographed or "
+                    "cropped image."
+                )
+            res.transcript, res.rotation_applied = best[0], best[1] % 360
     else:
         res.transcript = agents.transcribe(
             image_data_url=image_data_url, ledger=res.ledger
         )
 
     res.transcript_text = res.transcript.text
+    res.unreadable = not _readable(res.transcript)
     rot_note = (
         f", rotated {res.rotation_applied}°"
         if getattr(res, "rotation_applied", 0)
@@ -116,6 +170,7 @@ def transcribe_step(
             ),
             res.transcript.text,
             time.time() - t0,
+            blocked=res.unreadable,
         )
     )
 
@@ -139,11 +194,28 @@ def transcribe_step(
     return res
 
 
+class Unreadable(RuntimeError):
+    """The page could not be read, so there is nothing to grade."""
+
+
 def assess_step(
     *, prompt_text: str, res: RunResult, parallel: bool = True
 ) -> RunResult:
-    """Grade `res.transcript_text`, which may have been corrected by a human."""
+    """Grade `res.transcript_text`, which may have been corrected by a human.
+
+    Refuses to run on a transcript the model could not read. Grading
+    "[ilegible]" previously produced a confident Novice Low placement built
+    on nothing, which is exactly the kind of answer this project exists to
+    avoid. A human who retypes the text by hand clears the flag, because
+    then there is something real to grade.
+    """
     transcript = res.transcript_text
+    if res.unreadable and not res.human_edited:
+        raise Unreadable(
+            "The page could not be read, so there is nothing to assess. "
+            "Try rotating it, re-photographing it in better light, or typing "
+            "the text in by hand."
+        )
 
     # --- four criterion specialists ----------------------------------------
     t0 = time.time()

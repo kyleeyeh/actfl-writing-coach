@@ -35,6 +35,7 @@ from app.config import (  # noqa: E402
 )
 from backend import handout, imaging, pipeline, progress, scale, store  # noqa: E402
 from backend.client import ContentFiltered  # noqa: E402
+from backend.pipeline import Unreadable  # noqa: E402
 from backend.usage import Ledger  # noqa: E402
 import json  # noqa: E402
 
@@ -337,6 +338,7 @@ with left:
     for col, label, delta in ((c1, "↺ 90°", -90), (c2, "↻ 90°", 90), (c3, "↕ 180°", 180)):
         if col.button(label, use_container_width=True):
             st.session_state.rotation = (rotation + delta) % 360
+            st.session_state.manual_rotation = st.session_state.rotation
             st.session_state.pop("res", None)
             st.session_state.stage = "new"
             st.rerun()
@@ -356,9 +358,9 @@ with right:
             '<span class="muted">The transcription is deliberately literal: '
             "spelling errors, missing accents and wrong verb forms are kept "
             "exactly as written, because those errors are the evidence being "
-            "assessed. Check the page is the right way up first — the model "
-            "will invent a plausible composition rather than admit it cannot "
-            "read one.</span>",
+            "assessed. The orientation is worked out automatically; if the "
+            "page cannot be read, the app says so rather than guessing at "
+            "it.</span>",
             unsafe_allow_html=True,
         )
         if st.button("Transcribe", type="primary", disabled=not assignment.strip()):
@@ -366,12 +368,17 @@ with right:
                 with st.spinner(f"Reading {len(pages)} page(s)..."):
                     res = pipeline.RunResult(ledger=Ledger(label=student or "ui"))
                     pipeline.transcribe_step(
-                        raw_images=pages, rotation=rotation, res=res
+                        raw_images=pages,
+                        # None lets the app find the orientation itself; the
+                        # rotate buttons set an explicit angle.
+                        rotation=st.session_state.get("manual_rotation"),
+                        res=res,
                     )
             except ContentFiltered as exc:
                 st.error(str(exc))
                 st.stop()
             st.session_state.res = res
+            st.session_state.rotation = res.rotation_applied
             st.session_state.stage = "confirm"
             st.rerun()
         if not assignment.strip():
@@ -404,8 +411,18 @@ with right:
             for h in res.injection_hits:
                 st.code(h.excerpt, language=None)
 
+        if res.unreadable:
+            st.error(
+                "**The page could not be read.** The app tried "
+                f"{len(res.orientation_attempts)} orientation(s) and reported "
+                "it could not make out the writing, rather than guessing at "
+                "it. Rotate the page, re-photograph it in better light, or "
+                "type the text in below and it will be assessed on that."
+            )
+            st.caption(f"Attempts (rotation, confidence): {res.orientation_attempts}")
+
         conf = res.transcript.confidence
-        st.progress(conf, text=f"Model's own confidence {conf:.0%} (not reliable alone)")
+        st.progress(conf, text=f"Transcription confidence {conf:.0%}")
         if res.transcript.illegible_spans:
             st.warning("Unreadable: " + ", ".join(res.transcript.illegible_spans))
 
@@ -414,8 +431,12 @@ with right:
         if a.button("Looks right — assess it", type="primary"):
             res.human_edited = edited.strip() != res.transcript.text.strip()
             res.transcript_text = edited
-            with st.spinner("Four criterion specialists are reading it..."):
-                pipeline.assess_step(prompt_text=assignment, res=res)
+            try:
+                with st.spinner("Four criterion specialists are reading it..."):
+                    pipeline.assess_step(prompt_text=assignment, res=res)
+            except Unreadable as exc:
+                st.error(str(exc))
+                st.stop()
             st.session_state.res = res
             st.session_state.saved_to = store.save(
                 res, student=student or "sin nombre",

@@ -22,6 +22,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="backslashreplace")
 
 from app.config import OUTPUT_DIR, PRICING_IS_PLACEHOLDER, SAMPLES_DIR  # noqa: E402
 from backend import pipeline  # noqa: E402
+from backend.pipeline import Unreadable  # noqa: E402
 
 
 def _sample_prompt(manifest: dict, sample_id: str) -> str:
@@ -82,13 +83,17 @@ def main() -> int:
         rotation = args.rotate
 
     print(f"Running {args.sample} at rotation {rotation} degrees ...\n")
-    res = pipeline.run(
-        raw_images=[raw],
-        rotation=rotation,
-        prompt_text=_sample_prompt(manifest, args.sample),
-        parallel=not args.serial,
-        label=args.sample,
-    )
+    try:
+        res = pipeline.run(
+            raw_images=[raw],
+            rotation=rotation,
+            prompt_text=_sample_prompt(manifest, args.sample),
+            parallel=not args.serial,
+            label=args.sample,
+        )
+    except Unreadable as exc:
+        print(f"  UNREADABLE: {exc}")
+        return 2
 
     print("=" * 72)
     print("RUN TRACE")

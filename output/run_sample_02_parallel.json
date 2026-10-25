@@ -1,6 +1,6 @@
 {
   "transcript": {
-    "text": "Nombre: __________\n\nEl verano pasado yo voy a Puerto Rico con mi familia.\nNosotros nadamos en el mar todos los dias. Mi hermano no sabe nadar, entonses el juega en la arena. La comida es muy rica. Yo como mofongo y me gusta mucho. Un dia llueve y nosotros miramos television en el hotel. Fue divertido.",
+    "text": "Nombre: __________\nEl verano pasado yo voy a Puerto Rico con mi familia.\nNosotros nadamos en el mar todos los dias. Mi hermano no sabe nadar, entonces el juega en la arena. La comida es muy rica. Yo como mofongo y me gusta mucho. Un dia llueve y nosotros miramos television en el hotel. Fue divertido.",
     "illegible_spans": [],
     "confidence": 0.99,
     "contains_instruction_like_text": false
@@ -13,50 +13,56 @@
       "evidence": [
         {
           "quote": "El verano pasado yo voy a Puerto Rico con mi familia.",
-          "observation": "Attempts a simple narrative about a familiar personal experience, consistent with Intermediate Low's ability to create statements based on familiar material.",
+          "observation": "Escribe una afirmación sobre una experiencia personal y familiar, una función de expresión de hechos sencillos en un área personal y predecible.",
           "supports_level": "Intermediate",
           "supports_sublevel": "Low"
         },
         {
-          "quote": "Nosotros nadamos en el mar todos los dias. Mi hermano no sabe nadar, entonses el juega en la arena.",
-          "observation": "Provides several simple statements about activities and family in a predictable personal topic area, consistent with the simple statement-making described at Intermediate Low.",
+          "quote": "Nosotros nadamos en el mar todos los dias. Mi hermano no sabe nadar, entonces el juega en la arena.",
+          "observation": "Comunica información sencilla sobre actividades familiares y recreativas mediante afirmaciones breves.",
           "supports_level": "Intermediate",
           "supports_sublevel": "Low"
         },
         {
-          "quote": "Un dia llueve y nosotros miramos television en el hotel. Fue divertido.",
-          "observation": "Adds a simple event and reaction to the account, but the sample does not show a practical communication task such as a message, letter, or request for information.",
+          "quote": "Fue divertido.",
+          "observation": "Expresa una reacción sencilla a la experiencia narrada, pero la muestra no incluye una petición de información, pregunta o respuesta escrita, mensaje práctico ni otra tarea transaccional.",
           "supports_level": "Intermediate",
           "supports_sublevel": "Low"
         }
       ],
-      "ceiling_reason": "The sample does not show the broader practical writing needs associated with Intermediate Mid, such as a short communication or request for information; it only presents simple statements in a personal account."
+      "ceiling_reason": "Para mostrar Intermediate Mid en la función, la muestra tendría que evidenciar una gama mayor de necesidades prácticas, como una comunicación sencilla o una solicitud de información. Aquí solo se observa la expresión de hechos y una reacción sobre un tema personal; no aparecen preguntas, respuestas escritas ni comunicaciones o solicitudes prácticas."
     },
     {
       "criterion": "A",
-      "consistent_with_level": "Novice",
-      "consistent_with_sublevel": "High",
+      "consistent_with_level": "Intermediate",
+      "consistent_with_sublevel": "Low",
       "evidence": [
         {
           "quote": "Nosotros nadamos en el mar todos los dias.",
-          "observation": "Uses a simple sentence with a comprehensible subject, verb, and familiar vocabulary. The missing accent in \"dias\" and the mismatch between the past-time context and present-form \"nadamos\" show limited accuracy beyond basic sentence construction.",
-          "supports_level": "Novice",
-          "supports_sublevel": "High"
+          "observation": "Uses a simple sentence and familiar vocabulary to communicate a comprehensible activity. The missing accent in “dias” is a spelling error.",
+          "supports_level": "Intermediate",
+          "supports_sublevel": "Low"
         },
         {
-          "quote": "Mi hermano no sabe nadar, entonses el juega en la arena.",
-          "observation": "Communicates a simple relationship between ideas with familiar vocabulary, but \"entonses\" is misspelled and \"el\" lacks the accent needed for the pronoun.",
-          "supports_level": "Novice",
-          "supports_sublevel": "High"
+          "quote": "El verano pasado yo voy a Puerto Rico con mi familia.",
+          "observation": "The intended past-time meaning is understandable, but “voy” uses present tense despite “El verano pasado,” showing an error in verb form and time reference.",
+          "supports_level": "Intermediate",
+          "supports_sublevel": "Low"
         },
         {
-          "quote": "Un dia llueve y nosotros miramos television en el hotel. Fue divertido.",
-          "observation": "Uses simple, mostly understandable sentences, but omits accents in \"dia\" and \"television\" and shifts from present forms \"llueve\" and \"miramos\" to past \"Fue\".",
-          "supports_level": "Novice",
-          "supports_sublevel": "High"
+          "quote": "Mi hermano no sabe nadar, entonces el juega en la arena.",
+          "observation": "Communicates a simple connected idea with basic vocabulary and sentence structure; “el” lacks the accent needed for the subject pronoun “él.”",
+          "supports_level": "Intermediate",
+          "supports_sublevel": "Low"
+        },
+        {
+          "quote": "Un dia llueve y nosotros miramos television en el hotel.",
+          "observation": "The meaning is broadly clear, but the sentence has spelling errors in “día” and “televisión,” and present-tense verbs (“llueve,” “miramos”) in a passage about last summer.",
+          "supports_level": "Intermediate",
+          "supports_sublevel": "Low"
         }
       ],
-      "ceiling_reason": "The sample does not show sustained, accurate sentence-level writing: it has frequent spelling and accent errors (\"entonses,\" \"dias,\" \"el,\" \"dia,\" \"television\") and does not consistently maintain the past time frame indicated by \"El verano pasado\" (\"yo voy,\" \"llueve,\" \"miramos\"). More consistent accuracy in basic spelling, accents, and verb forms across simple sentences is absent."
+      "ceiling_reason": "The sample does not show the more consistent control of basic sentence structures and verb forms described for Intermediate Mid. In particular, it does not maintain past-time reference for the vacation: “El verano pasado yo voy” and “Un dia llueve” use present-tense forms, and several written accents are missing (“dias,” “el,” “dia,” “television”)."
     },
     {
       "criterion": "C",
@@ -64,19 +70,25 @@
       "consistent_with_sublevel": "Low",
       "evidence": [
         {
-          "quote": "Nosotros nadamos en el mar todos los dias. Mi hermano no sabe nadar, entonses el juega en la arena.",
-          "observation": "The content addresses familiar personal vacation activities and family, consistent with the Intermediate Low focus on highly predictable content and personal information.",
+          "quote": "El verano pasado yo voy a Puerto Rico con mi familia.",
+          "observation": "Addresses a familiar personal experience and gives its setting, time, and companions, consistent with the predictable personal content described at Intermediate Low.",
+          "supports_level": "Intermediate",
+          "supports_sublevel": "Low"
+        },
+        {
+          "quote": "Nosotros nadamos en el mar todos los dias. Mi hermano no sabe nadar, entonces el juega en la arena. La comida es muy rica. Yo como mofongo y me gusta mucho.",
+          "observation": "Adds simple details about family activities and food during the vacation, keeping the content within familiar personal topics.",
           "supports_level": "Intermediate",
           "supports_sublevel": "Low"
         },
         {
           "quote": "Un dia llueve y nosotros miramos television en el hotel. Fue divertido.",
-          "observation": "The writer includes a simple event and a personal reaction, but the content remains limited to familiar everyday vacation experiences.",
+          "observation": "Mentions another everyday vacation event and a simple personal reaction, but the content remains limited to a brief, familiar personal account.",
           "supports_level": "Intermediate",
           "supports_sublevel": "Low"
         }
       ],
-      "ceiling_reason": "The sample does not show content beyond highly predictable personal topics: it does not develop a broader range of personal preferences, routines, common events, or other personal topics that would support Intermediate Mid on context and content."
+      "ceiling_reason": "The sample does not show the broader range of personal topics and practical writing situations described at Intermediate Mid; it gives only a brief account of familiar vacation activities and a simple reaction, without developing other personal topics such as preferences, routines, or common events beyond this trip."
     },
     {
       "criterion": "T",
@@ -85,53 +97,53 @@
       "evidence": [
         {
           "quote": "El verano pasado yo voy a Puerto Rico con mi familia.",
-          "observation": "This is a simple sentence about a personal event, showing sentence-level text rather than only isolated words or phrases.",
+          "observation": "The sample produces a simple sentence about a familiar personal experience, consistent with sentence-level writing.",
           "supports_level": "Intermediate",
           "supports_sublevel": "Low"
         },
         {
-          "quote": "Nosotros nadamos en el mar todos los dias. Mi hermano no sabe nadar, entonses el juega en la arena. La comida es muy rica. Yo como mofongo y me gusta mucho. Un dia llueve y nosotros miramos television en el hotel. Fue divertido.",
-          "observation": "The sample extends across a series of discrete, simple sentences, loosely strung together about a familiar personal topic; this is consistent with short, simple sentence-level writing.",
+          "quote": "Nosotros nadamos en el mar todos los dias. Mi hermano no sabe nadar, entonces el juega en la arena.",
+          "observation": "These are discrete sentences loosely linked to recount activities, rather than a developed paragraph with broader organization.",
+          "supports_level": "Intermediate",
+          "supports_sublevel": "Mid"
+        },
+        {
+          "quote": "Un dia llueve y nosotros miramos television en el hotel. Fue divertido.",
+          "observation": "The writer adds a brief event and reaction, but the sample remains a short sequence of simple sentences rather than a paragraph-length composition with sustained development.",
           "supports_level": "Intermediate",
           "supports_sublevel": "Mid"
         }
       ],
-      "ceiling_reason": "The sample does not show paragraph-length composition with linked sentences and paragraph structure, which is needed to support the next sublevel, Intermediate Mid, on text type."
+      "ceiling_reason": "The sample does not show the paragraph-length composition and structure described at Advanced Low: it consists of a few discrete, loosely connected sentences, with no developed paragraph organization. To show that next sublevel on T, combine and develop the events into a structured paragraph rather than simply listing them in sentence sequence."
     }
   ],
   "placement": {
-    "consistent_with_level": "Novice",
-    "consistent_with_sublevel": "High",
-    "limiting_criterion": "A",
-    "rationale": "The findings place F, C, and T consistent with Intermediate Low, but A is the limiting criterion and is consistent with Novice High. The sample conveys a simple personal account in understandable sentences, but frequent spelling and accent errors and inconsistent verb time frames mean it does not demonstrate sustained accuracy at the Intermediate Low level. Across the four criteria, the evidence is therefore consistent with Novice High, not a certified proficiency level.",
-    "next_sublevel_target": "Intermediate Low",
-    "caveat": "One writing sample cannot establish an ACTFL rating; this assessment reports only evidence consistent with a level."
+    "consistent_with_level": "Intermediate",
+    "consistent_with_sublevel": "Low",
+    "limiting_criterion": "F",
+    "rationale": "The sample is consistent with Intermediate Low across the four criteria. It communicates familiar personal information in a short sequence of simple sentences about a family vacation, activities, food, and a reaction. The limiting criterion is F: the sample expresses simple facts and a reaction but does not demonstrate the broader practical writing needs, such as asking or responding to questions or requesting information, described at Intermediate Mid. Accuracy also shows inconsistent past-time verb forms and spelling errors. This is evidence from this sample only, not a certified proficiency level.",
+    "next_sublevel_target": "Intermediate Mid",
+    "caveat": "One writing sample cannot establish an ACTFL rating."
   },
   "drills": {
     "drills": [
       {
-        "kind": "technical_drill",
-        "title": "Verbos en pasado: completa y revisa",
-        "instructions_es": "Completa las oraciones con el verbo entre paréntesis en el pasado. Después, revisa que todos los verbos hablen del pasado.\n1. Ayer yo ___ (visitar) a mi abuela.\n2. Nosotros ___ (comer) en un restaurante.\n3. Mis amigos ___ (ir) al parque.\n4. Yo ___ (ver) una película.\n5. Mi familia ___ (hacer) una excursión.\n6. Ellos ___ (jugar) al fútbol.",
-        "teacher_note_en": "Targets A: look for accurate basic verb forms and consistent past time frames across these simple sentences. The ceiling gap is inconsistent verb time frames (for example, shifting from past to present); check whether the student maintains the requested time frame throughout.",
-        "targets_criterion": "A",
-        "targets_gap": "Inconsistent verb time frames in simple sentences; the sample shifts from the past-time cue to present-tense forms."
-      },
-      {
-        "kind": "technical_drill",
-        "title": "Ortografía y tildes",
-        "instructions_es": "Copia las oraciones correctamente. Añade las tildes y las mayúsculas que faltan.\n1. el sabado visite a mi tia.\n2. despues comimos en un cafe.\n3. mi hermano miro television por la tarde.\n4. fueron tres dias muy buenos.",
-        "teacher_note_en": "Targets A: look for correct spelling, accents, capitalization, and punctuation in familiar words. The ceiling gap includes frequent spelling and accent errors such as dias and television; note whether the student can correct these consistently rather than only once.",
-        "targets_criterion": "A",
-        "targets_gap": "Frequent spelling and accent errors in familiar words, including missing accent marks."
-      },
-      {
         "kind": "essay_prompt",
-        "title": "Un día especial del pasado",
-        "instructions_es": "Escribe un párrafo corto sobre un día especial que tuviste. ¿Cuándo fue? ¿Adónde fuiste? ¿Qué hiciste y con quién? ¿Qué comiste o viste? ¿Te gustó el día? Usa oraciones sencillas y escribe los verbos en pasado. Al final, revisa los verbos, la ortografía y las tildes.",
-        "teacher_note_en": "Targets A through sustained practice in a familiar personal account. Look for accurate basic sentence structures, consistent past-tense verb forms, spelling, and accent marks across the paragraph. The ceiling gap is that accuracy is not sustained across simple sentences; success on one sample alone does not establish a proficiency rating.",
-        "targets_criterion": "A",
-        "targets_gap": "Sustained accuracy is not demonstrated: frequent spelling and accent errors and inconsistent verb time frames occur across simple sentences."
+        "title": "Ask for Information About a Trip",
+        "explanation_en": "You can already write simple facts and reactions about familiar experiences. Practice using writing to get something you need: ask clear questions, request specific information, and include a brief response to a question from someone else.",
+        "task_es": "Quieres hacer un viaje con tu familia. Escribe un mensaje a un hotel. Di cuándo quieres viajar y cuántas personas van. Pregunta por el precio, las comidas y las actividades. Después, responde a esta pregunta: «¿Qué tipo de habitación prefieren?»",
+        "teacher_note_en": "This directly targets practical writing functions rather than another personal narrative. Look for a usable message with multiple clear information requests and a relevant written response to the stated question.",
+        "targets_criterion": "F",
+        "targets_gap": "The sample states facts and a reaction but does not demonstrate asking or responding to questions, or requesting information in a practical communication."
+      },
+      {
+        "kind": "technical_drill",
+        "title": "Build a Practical Question-and-Reply Exchange",
+        "explanation_en": "You need practice doing more than describing what happened: use short written questions to obtain information and answer questions with useful details. Watch that each question asks for a specific fact and that each answer responds directly.",
+        "task_es": "Completa cada intercambio con una pregunta y una respuesta. Usa frases cortas.\n\n1. Quieres saber el precio del desayuno. Pregunta: ________. Respuesta: El desayuno cuesta diez dólares.\n2. Quieres saber a qué hora sale el autobús. Pregunta: ________. Respuesta: Sale a las nueve.\n3. Una persona pregunta: «¿Cuántos días quieres viajar?» Responde: ________. Después, pregunta si hay habitaciones libres: ________.",
+        "teacher_note_en": "This short, mechanical exchange practices both information-seeking questions and direct replies, the practical functions missing from the sample. Check that the questions fit the answers and that the final reply and request are complete enough to communicate the student's need.",
+        "targets_criterion": "F",
+        "targets_gap": "The sample does not include written questions, responses, or practical requests for information."
       }
     ]
   },

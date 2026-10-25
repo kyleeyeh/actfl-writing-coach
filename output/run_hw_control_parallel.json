@@ -1,30 +1,36 @@
 {
   "transcript": {
-    "text": "Hola, me llamo Javier y tengo diesis años.\nVivo en Chicago con mi familia. Mi hermano\nse llama Luis y el es muy comico. Mi gusta\njugar futbol pero no me gusta la tarea.",
+    "text": "Hola, me llamo Javier y tengo dieciséis años. Vivo en Chicago con mi familia. Mi hermano\nse llama Luis y el es muy comico. Mi gusta la música. Mi hermana\nJugar fútbol pero no me gusta la tarea.",
     "illegible_spans": [],
-    "confidence": 0.83,
+    "confidence": 0.91,
     "contains_instruction_like_text": false
   },
   "findings": [
     {
       "criterion": "F",
       "consistent_with_level": "Novice",
-      "consistent_with_sublevel": "Mid",
+      "consistent_with_sublevel": "High",
       "evidence": [
         {
-          "quote": "Hola, me llamo Javier y tengo diesis años.",
-          "observation": "Provides basic biographical information—name and age—consistent with the Novice Mid ability to supply limited information on simple forms and documents.",
+          "quote": "Hola, me llamo Javier y tengo dieciséis años.",
+          "observation": "Provides a simple self-introduction with a name and age, a familiar personal-information task.",
           "supports_level": "Novice",
           "supports_sublevel": "Mid"
         },
         {
-          "quote": "Vivo en Chicago con mi familia. Mi hermano\nse llama Luis y el es muy comico. Mi gusta\njugar futbol pero no me gusta la tarea.",
-          "observation": "Communicates simple information about residence, family, and likes and dislikes, fitting the Novice function of conveying simple messages on familiar everyday topics.",
+          "quote": "Vivo en Chicago con mi familia.",
+          "observation": "Communicates a simple personal fact about where he lives and with whom.",
           "supports_level": "Novice",
-          "supports_sublevel": "Mid"
+          "supports_sublevel": "High"
+        },
+        {
+          "quote": "Mi gusta la música. Mi hermana\nJugar fútbol pero no me gusta la tarea.",
+          "observation": "Attempts simple statements about likes and dislikes, but the message about the sister is incomplete; this sample shows only partial success in expressing the requested familiar information.",
+          "supports_level": "Novice",
+          "supports_sublevel": "High"
         }
       ],
-      "ceiling_reason": "The sample does not show the Novice High functions of meeting practical writing needs through a short message, note, or list, or expressing a simple message within a learned context. It provides only a brief self-description in response to the assignment, with no demonstrated practical message or note."
+      "ceiling_reason": "The sample does not show sustained ability to recombine practiced language into simple sentences across the requested familiar topics: the statement about the sister is incomplete, and there is no information about physical or personality traits, friends, or what the writer likes beyond music and dislikes beyond homework. Thus it does not demonstrate sentence-level expression consistently enough to show the next sublevel."
     },
     {
       "criterion": "A",
@@ -32,51 +38,57 @@
       "consistent_with_sublevel": "Mid",
       "evidence": [
         {
-          "quote": "Hola, me llamo Javier y tengo diesis años.",
-          "observation": "Uses familiar formulaic language and a basic sentence to give personal information. The misspelling “diesis” shows an error in spelling.",
+          "quote": "Hola, me llamo Javier y tengo dieciséis años.",
+          "observation": "This familiar biographical information is expressed with accurate basic forms, consistent with the Novice Mid descriptor of high accuracy on well-rehearsed, familiar topics.",
           "supports_level": "Novice",
           "supports_sublevel": "Mid"
         },
         {
           "quote": "Mi hermano\nse llama Luis y el es muy comico.",
-          "observation": "Conveys familiar information with basic vocabulary and sentence structure, but omits the accent in “él” and “cómico.”",
+          "observation": "The message is understandable, but the omitted accent marks in “el” and “comico” show errors in spelling or written symbols.",
           "supports_level": "Novice",
           "supports_sublevel": "Mid"
         },
         {
-          "quote": "Mi gusta\njugar futbol pero no me gusta la tarea.",
-          "observation": "Uses familiar vocabulary and a simple contrast to communicate preferences, but “Mi gusta” shows an error in a basic structure and “futbol” lacks an accent.",
+          "quote": "Mi gusta la música.",
+          "observation": "The incorrect form “Mi gusta” shows limited control of a basic structure and interferes with accurate expression.",
           "supports_level": "Novice",
-          "supports_sublevel": "Mid"
+          "supports_sublevel": "High"
+        },
+        {
+          "quote": "Mi hermana\nJugar fútbol pero no me gusta la tarea.",
+          "observation": "The verb form “Jugar” does not form an accurate sentence in this context, showing that sentence-level accuracy is not sustained.",
+          "supports_level": "Novice",
+          "supports_sublevel": "High"
         }
       ],
-      "ceiling_reason": "The sample does not show consistently accurate language even on familiar personal topics: “Mi gusta” has an incorrect pronoun form, “diesis” is misspelled, and “el,” “comico,” and “futbol” lack required accents. The descriptors’ Novice Mid accuracy concerns well-rehearsed familiar topics; the sample does not show the accuracy and control needed to support the next sublevel, Novice High."
+      "ceiling_reason": "The sample does not show consistently accurate sentence-level writing: “Mi gusta la música.” has an incorrect basic structure, and “Mi hermana\nJugar fútbol” does not use a finite verb to complete the sentence. More consistent accuracy in recombined simple sentences is needed to show Novice High on this criterion."
     },
     {
       "criterion": "C",
       "consistent_with_level": "Novice",
-      "consistent_with_sublevel": "High",
+      "consistent_with_sublevel": "Mid",
       "evidence": [
         {
-          "quote": "Vivo en Chicago con mi familia.",
-          "observation": "The writer addresses familiar, directly personal everyday content by stating where he lives and who he lives with, consistent with Novice High content focused on common elements of daily life.",
+          "quote": "Hola, me llamo Javier y tengo dieciséis años. Vivo en Chicago con mi familia.",
+          "observation": "Addresses personal biographical information and familiar circumstances: name, age, place of residence, and family, consistent with Novice Mid content about oneself.",
           "supports_level": "Novice",
-          "supports_sublevel": "High"
+          "supports_sublevel": "Mid"
         },
         {
           "quote": "Mi hermano\nse llama Luis y el es muy comico.",
-          "observation": "The writer adds familiar family information, describing a brother and giving a personal characterization.",
+          "observation": "Adds a simple detail about an immediate family member, within familiar, personally relevant content.",
           "supports_level": "Novice",
-          "supports_sublevel": "High"
+          "supports_sublevel": "Mid"
         },
         {
-          "quote": "Mi gusta\njugar futbol pero no me gusta la tarea.",
-          "observation": "The writer addresses personal likes and dislikes on familiar topics.",
+          "quote": "Mi gusta la música. Mi hermana\nJugar fútbol pero no me gusta la tarea.",
+          "observation": "Mentions a preference, an apparent family activity, and dislike of homework, but the sample provides little elaboration beyond these familiar personal topics.",
           "supports_level": "Novice",
-          "supports_sublevel": "High"
+          "supports_sublevel": "Mid"
         }
       ],
-      "ceiling_reason": "The sample does not show the broader range of personal and social topics described at Intermediate, such as daily routines, common events, or other personal topics beyond basic self-introduction, family, and preferences."
+      "ceiling_reason": "The sample does not show the broader personal and social topics or the short communications about preferences, routines, common events, or other personal topics described at Intermediate Mid. It gives only brief biographical and familiar details, with no developed account of daily routines or events."
     },
     {
       "criterion": "T",
@@ -84,46 +96,57 @@
       "consistent_with_sublevel": "High",
       "evidence": [
         {
-          "quote": "Hola, me llamo Javier y tengo diesis años.",
-          "observation": "This is a simple sentence conveying basic personal information, consistent with sentence-level writing on a familiar topic.",
+          "quote": "Hola, me llamo Javier y tengo dieciséis años. Vivo en Chicago con mi familia.",
+          "observation": "The sample produces multiple simple sentences conveying familiar personal information, consistent with the Novice High descriptor for recombining practiced language into simple sentences on very familiar topics.",
           "supports_level": "Novice",
           "supports_sublevel": "High"
         },
         {
-          "quote": "Vivo en Chicago con mi familia. Mi hermano\nse llama Luis y el es muy comico. Mi gusta\njugar futbol pero no me gusta la tarea.",
-          "observation": "The sample combines several simple sentences into a short, loosely connected text about familiar daily-life topics; it does not sustain more developed paragraph-length discourse.",
+          "quote": "Mi hermano\nse llama Luis y el es muy comico. Mi gusta la música. Mi hermana\nJugar fútbol pero no me gusta la tarea.",
+          "observation": "The writing does not sustain sentence-level text throughout: the final clause is not formed as a complete sentence, and the sample remains a short series of simple sentences rather than connected paragraph-length discourse.",
           "supports_level": "Novice",
           "supports_sublevel": "High"
         }
       ],
-      "ceiling_reason": "The sample does not show sustained sentence-level writing across the full response: it is a short set of simple sentences and does not develop connected paragraph-length text, which would be needed to show the next sublevel, Intermediate Low, on text type."
+      "ceiling_reason": "To show the next sublevel, Intermediate Low, the sample would need to sustain a series of short, simple sentences that recombine familiar vocabulary and structures into statements. The final fragment, “Mi hermana\nJugar fútbol,” does not sustain that sentence-level writing."
     }
   ],
   "placement": {
     "consistent_with_level": "Novice",
     "consistent_with_sublevel": "Mid",
-    "limiting_criterion": "F",
-    "rationale": "The sample is consistent with Novice Mid overall. It supplies basic biographical information and conveys simple ideas about family and preferences, but does not demonstrate the practical writing functions described for Novice High, such as a short message, note, or list. Accuracy also shows errors in familiar language, while the content and text type are consistent with Novice High evidence. F is therefore the limiting criterion.",
+    "limiting_criterion": "A",
+    "rationale": "The limiting criterion is Accuracy: the sample contains errors in basic structures, including “Mi gusta” and the incomplete construction “Mi hermana Jugar fútbol,” so accurate sentence-level expression is not sustained. The brief familiar biographical and preference-related content is consistent with Novice Mid evidence across the criteria; the sample does not show sustained ability at the next sublevel.",
     "next_sublevel_target": "Novice High",
-    "caveat": "One writing sample cannot establish an ACTFL rating."
+    "caveat": "One writing sample cannot establish an ACTFL rating; it shows only evidence consistent with a level."
   },
   "drills": {
     "drills": [
       {
+        "kind": "technical_drill",
+        "title": "Build Complete Sentences",
+        "explanation_en": "You sometimes use a basic sentence pattern incorrectly or leave out the verb form the sentence needs. Watch for the difference between “me gusta” and “mi,” and make sure each sentence has a subject and a correctly formed verb.",
+        "task_es": "Completa las frases con la forma correcta del verbo entre paréntesis.\n1. A mí ___ ___ la música. (gustar)\n2. Mi hermana ___ al fútbol. (jugar)\n3. A mi amigo ___ ___ los deportes. (gustar)\n4. Yo ___ música después de la escuela. (escuchar)\n5. Mi hermana y yo ___ fútbol los sábados. (jugar)",
+        "teacher_note_en": "Targets the basic sentence patterns behind “Mi gusta” and “Mi hermana Jugar fútbol.” Look for correct forms of gustar, finite verb forms, and complete sentences rather than isolated infinitives.",
+        "targets_criterion": "A",
+        "targets_gap": "Basic structures are not accurate or complete consistently: the sample has an incorrect gustar construction and a sentence without a finite verb."
+      },
+      {
         "kind": "essay_prompt",
-        "title": "Un mensaje para un amigo",
-        "instructions_es": "Escribe un mensaje corto a un amigo. Dile cómo estás, qué haces hoy y qué quieres hacer con tu amigo. Usa frases sencillas. Escribe 4–6 oraciones.",
-        "teacher_note_en": "Targets F: practice a practical short message in a familiar social context, rather than another self-description. Look for whether the student completes the communicative task with a simple message and relevant information; do not require paragraph-level organization.",
-        "targets_criterion": "F",
-        "targets_gap": "The sample provides only a brief self-description and does not demonstrate a practical short message or note."
+        "title": "Write About What You Like",
+        "explanation_en": "You can practice writing several clear sentences about familiar people and activities. Check each sentence for a complete verb, and use “me gusta” or “me gustan” carefully when you describe what you enjoy.",
+        "task_es": "Escribe cinco frases sobre ti y una persona de tu familia o un amigo. Di qué música, deportes o actividades les gustan y qué hacen. Usa frases completas. Revisa los verbos y escribe «me gusta» o «me gustan».",
+        "teacher_note_en": "This short composition rehearses familiar preference and activity language while requiring the student to produce multiple complete sentences. Check for accurate gustar patterns, finite verbs, and sentence completeness across the response.",
+        "targets_criterion": "A",
+        "targets_gap": "The sample does not sustain accurate sentence-level expression, especially with gustar and finite verb forms."
       },
       {
         "kind": "technical_drill",
-        "title": "Notas y listas útiles",
-        "instructions_es": "Completa estas tareas con palabras o frases cortas: 1) Escribe una lista de tres cosas para llevar a la escuela. 2) Escribe una nota a tu familia: «Llego a casa a las ___.» 3) Escribe un mensaje corto: «¿Quieres ___ conmigo?»",
-        "teacher_note_en": "Targets F through repeated practice of Novice High functions: producing a simple list, a note, and a short message. Check that each response serves the stated practical purpose and includes usable information, not just copied biographical facts.",
-        "targets_criterion": "F",
-        "targets_gap": "The sample does not demonstrate practical writing functions such as a short message, note, or list."
+        "title": "Choose the Correct Verb Form",
+        "explanation_en": "You need to use a verb form that matches who is doing the action. In each sentence, choose the form that makes the whole sentence complete, then reread it to check that it makes sense.",
+        "task_es": "Elige la forma correcta y escribe la frase completa.\n1. Mi hermana (jugar / juega) al fútbol.\n2. Mis amigos (escuchar / escuchan) música.\n3. Yo (bailar / bailo) en casa.\n4. Mi hermano (gustar / gusta) la música. Escribe la frase empezando con «A mi hermano».\n5. A mí (me gusta / mi gusta) el fútbol.",
+        "teacher_note_en": "Provides focused repetition on finite verb forms and the familiar gustar structure, addressing the sample’s specific accuracy problems. Look for complete written sentences and correct subject-verb forms, not just correct choices.",
+        "targets_criterion": "A",
+        "targets_gap": "The sample includes an infinitive where a finite verb is needed and an incorrect basic gustar construction."
       }
     ]
   },
