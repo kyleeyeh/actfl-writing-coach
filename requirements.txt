@@ -8,5 +8,14 @@ streamlit>=1.40
 # Image handling for scanned/photographed handwriting.
 pillow>=11.0
 
+# Page orientation analysis in backend/imaging.py. Streamlit pulls numpy
+# in anyway, but the app imports it directly, so it is declared directly.
+numpy>=2.0
+
+# Rendering College Board PDF pages in scripts/ingest_ap.py. Only needed
+# to rebuild the expert-scored validation set, not to run the app.
+pypdfium2>=5.0
+pypdf>=6.0
+
 python-dotenv>=1.0
 pydantic>=2.9
