@@ -1,0 +1,47 @@
+{
+  "rater": "Kyle Yeh, former high-school Spanish teacher",
+  "date": "2026-10-25",
+  "method": "Read the six compositions blind, with no access to the intended targets and before seeing any output from the app.",
+  "note": "Levels were given as ranges, which is how a teacher actually reads a single short sample. Both the range and its midpoint are used; a placement inside the range counts as agreement.",
+  "labels": {
+    "A": {
+      "low": "Intermediate Mid",
+      "high": "Intermediate High",
+      "lean": null,
+      "comment": "Zero errors, which is itself a problem with the item -- see item_critiques."
+    },
+    "B": {
+      "low": "Novice Mid",
+      "high": "Novice High",
+      "lean": "Novice High",
+      "comment": ""
+    },
+    "C": {
+      "low": "Advanced High",
+      "high": "Advanced High",
+      "lean": null,
+      "comment": "Rater noted never having graded a student this high, so treat as a less certain judgement."
+    },
+    "D": {
+      "low": "Intermediate Low",
+      "high": "Intermediate Mid",
+      "lean": null,
+      "comment": ""
+    },
+    "E": {
+      "low": "Novice High",
+      "high": "Intermediate Low",
+      "lean": null,
+      "comment": ""
+    },
+    "F": {
+      "low": "Advanced Mid",
+      "high": "Advanced Mid",
+      "lean": null,
+      "comment": "Given as a best guess."
+    }
+  },
+  "item_critiques": {
+    "A": "The rater observed that Muestra A contains no errors at all. ACTFL's Intermediate Mid descriptor expects control of basic structures but not error-free writing, so an error-free text is not a well-formed Intermediate Mid item. The target may be mis-written rather than the rating being wrong, and the item is flagged rather than silently counted."
+  }
+}

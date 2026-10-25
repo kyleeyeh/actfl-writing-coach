@@ -67,11 +67,32 @@ PAGE_RE_TASK = re.compile(
 # task type, and flag it, because the evaluators judge Functions and tasks
 # against whatever prompt they are given -- a vague prompt makes that
 # criterion unfair, and the report needs to say so rather than hide it.
-GENERIC_EMAIL_TASK = (
-    "Email reply (interpersonal writing, 15 minutes). Read a formal email and "
-    "write a reply in a formal register. The reply must address the questions "
-    "asked in the message, request additional information by asking a "
-    "question, and include an appropriate greeting and closing."
+#
+# These MUST be per-question. An earlier version used the email-reply text for
+# every task, which told the evaluators that six argumentative essays were
+# supposed to be emails. The essays correctly contained no greeting, closing
+# or request for information, so Functions and tasks was marked down for not
+# performing a task that was never set, and all six landed at Novice High.
+GENERIC_TASKS = {
+    "1": (
+        "Email reply (interpersonal writing, 15 minutes). Read a formal email "
+        "and write a reply in a formal register. The reply must address the "
+        "questions asked in the message, request additional information by "
+        "asking a question, and include an appropriate greeting and closing."
+    ),
+    "2": (
+        "Argumentative essay (presentational writing, approximately 55 "
+        "minutes). Using three provided sources -- an article, a table or "
+        "graphic, and an audio report -- write a formal persuasive essay in "
+        "Spanish that presents and defends your own position on the question "
+        "asked. You must cite all three sources, address differing viewpoints, "
+        "and organise the argument into a coherent multi-paragraph whole. No "
+        "greeting or closing is expected; this is an essay, not a letter."
+    ),
+}
+GENERIC_FALLBACK = (
+    "Respond in writing in Spanish to the task set by the exam question, in "
+    "an appropriate register and format."
 )
 
 
@@ -105,14 +126,14 @@ def flat(text: str) -> str:
     return re.sub(r"\s+", " ", text or "")
 
 
-def task_prompt_from(blob: str) -> tuple[str, bool]:
+def task_prompt_from(blob: str, question: str) -> tuple[str, bool]:
     """(prompt, is_reconstructed). True means it was not printed in the PDF."""
     m = re.search(r"Overview\s+(.{200,2000}?)(?=Sample:?\s*[0-9]+[A-Z])", blob, re.S)
     if m:
         text = flat(m.group(1))
         if "can be found in" not in text and len(text) > 200:
             return text[:1200], False
-    return GENERIC_EMAIL_TASK, True
+    return GENERIC_TASKS.get(question, GENERIC_FALLBACK), True
 
 
 def commentary_for(blob: str, sample_id: str) -> str:
@@ -149,7 +170,6 @@ def ingest(pdf: Path) -> list[dict]:
         if scores:
             score_kind = "language_1_3"
 
-    task_prompt, reconstructed = task_prompt_from(blob)
     if not scores:
         print(f"  !! no scores found in {pdf.name}; skipping")
         return []
@@ -197,6 +217,7 @@ def ingest(pdf: Path) -> list[dict]:
 
     records: list[dict] = []
     for idx, question, sample_id, part, total in sorted(filled):
+        task_prompt, reconstructed = task_prompt_from(blob, question)
         key = f"{pdf.stem}_{sample_id}"
         name = f"{key}_p{part}.png"
         if not render_page(pdf, idx, OUT / name):
