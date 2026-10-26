@@ -28,6 +28,9 @@ DEST = ROOT / "slides" / "slides.html"
 FIG = ROOT / "report" / "figures"
 
 REVEAL = "https://cdn.jsdelivr.net/npm/reveal.js@5.1.0"
+# Canvas only accepts files, not a URL, so the repository link has to
+# travel inside the deck itself or the project cannot be cloned or graded.
+REPO = "https://github.com/kyleeyeh/actfl-writing-coach"
 
 CSS = """
 :root{--ink:#16202e;--muted:#6b7a8d;--accent:#2d6cb5;--bad:#c0392b;--good:#1d7a4a}
@@ -57,6 +60,11 @@ CSS = """
 .quote{border-left:5px solid var(--accent);padding-left:.6em;font-style:italic;
        color:#33465c;font-size:.82em}
 .small{font-size:.62em;color:var(--muted)}
+.repo{display:inline-block;margin-top:.5em;padding:.3em .8em;border:2px solid var(--accent);
+      border-radius:8px;font-family:ui-monospace,Consolas,monospace;font-size:.6em;
+      color:var(--accent);background:#f3f8fd;word-break:break-all}
+.repo b{font-family:'Segoe UI',sans-serif;color:var(--muted);font-weight:600;
+        display:block;font-size:.8em;letter-spacing:.06em;text-transform:uppercase}
 .fallback .reveal{display:block;height:auto}
 """
 
@@ -104,6 +112,7 @@ def main() -> int:
   <p class="lead">Photograph a student's handwritten Spanish. Get back the one
   thing holding them below the next proficiency level — and the practice for it.</p>
   <p class="small">Kyle Yeh · MGT 409 · {date.today():%d %B %Y}</p>
+  <p class="repo"><b>Code</b>{REPO}</p>
 </section>""")
 
     # 2 -- the problem
@@ -237,6 +246,7 @@ def main() -> int:
   even though "what level are you?" is not.</p>
   <p class="small">Next: fix the calibration against a real ACTFL-rated corpus ·
   evaluate the drills, which nothing has validated yet · batch a whole class.</p>
+  <p class="repo"><b>Repository — clone and run, see README</b>{REPO}</p>
 </section>""")
 
     body = "\n".join(slides)

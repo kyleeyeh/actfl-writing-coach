@@ -169,6 +169,13 @@ blockquote{margin:1.1em 0;padding:.1em 0 .1em 1.1em;border-left:3px solid var(--
 .kpi{flex:1 1 9em;border:1px solid var(--rule);border-radius:8px;padding:.7em .9em}
 .kpi .v{font-size:1.5em;font-weight:700;font-variant-numeric:tabular-nums}
 .kpi .l{color:var(--muted);font-size:.78em;text-transform:uppercase;letter-spacing:.04em}
+.repo{border:2px solid var(--accent);border-radius:8px;padding:.5em .9em;
+      margin:0 0 1.6em;font-family:ui-monospace,Consolas,monospace;font-size:.9em;
+      background:#f4f8fc;word-break:break-all}
+.repo b{font-family:Georgia,serif;color:var(--muted);font-weight:600;
+        display:block;font-size:.75em;letter-spacing:.07em;text-transform:uppercase;
+        margin-bottom:.15em}
+.repo a{color:var(--accent)}
 .todo{background:#fff6f6;border:1px dashed var(--bad);color:var(--bad);
       padding:.6em .9em;border-radius:6px;margin:1em 0;font-family:ui-monospace,monospace;
       font-size:.84em}
@@ -282,6 +289,7 @@ def main() -> int:
 <style>{CSS}</style></head><body>
 <h1>ACTFL Writing Coach</h1>
 <p class="sub">Kyle Yeh &middot; MGT 409 &middot; {date.today():%d %B %Y}</p>
+<p class="repo"><b>Repository</b> <a href="https://github.com/kyleeyeh/actfl-writing-coach">https://github.com/kyleeyeh/actfl-writing-coach</a></p>
 {"".join(body)}
 </body></html>"""
 
