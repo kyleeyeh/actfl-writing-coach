@@ -1,4 +1,4 @@
-**ACTFL Writing Coach** — reads a photograph of a student's handwritten
+**Entrenador de escritura** (ACTFL Writing Coach) — reads a photograph of a student's handwritten
 Spanish, reports which ACTFL 2024 Writing criteria the sample shows evidence
 for, names the one criterion blocking the next sublevel, and generates
 practice aimed at that specific gap.

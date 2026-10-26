@@ -40,7 +40,7 @@ from backend.usage import Ledger  # noqa: E402
 import json  # noqa: E402
 
 st.set_page_config(
-    page_title="ACTFL Writing Coach",
+    page_title="Entrenador de escritura",
     page_icon="✎",
     layout="wide",
     # Everything that starts a task lives in the sidebar, so collapsing
@@ -58,69 +58,117 @@ CRITERION_LABEL = {
 st.markdown(
     """
     <style>
+      /* Source Serif 4: a warm transitional serif designed for screen, in the
+         same family of shapes as the serif Claude's own interface uses. The
+         stack falls back to Georgia so the app still reads correctly if the
+         font cannot be fetched. */
+      @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..600&display=swap');
+
       :root{
-        --ink:#121c2b; --muted:#64748b; --line:#e3e9f0;
-        --accent:#15497a; --accent-soft:#eef4fa;
-        --good:#15803d; --good-soft:#e8f6ed;
-        --bad:#b42318;  --bad-soft:#fdeceb;
+        /* Spanish and Latin American ceramics: warm paper, terracotta,
+           saffron, olive, and a brown-black ink instead of a cold grey. */
+        --paper:#FCF8F2; --paper-2:#F6EEE2; --paper-3:#F0E4D2;
+        --ink:#2A211C; --muted:#7A6A5D; --line:#E4D6C3;
+        --terra:#B4542E; --terra-soft:#F7E7DE;
+        --saffron:#C98A1E; --saffron-soft:#FBF0D8;
+        --olive:#5C7A4A; --olive-soft:#EBF1E5;
+        --brick:#A33327; --brick-soft:#FAE6E2;
+        --serif:'Source Serif 4', Georgia, 'Iowan Old Style', 'Times New Roman', serif;
       }
-      .block-container{padding-top:1.4rem; max-width:1280px;}
 
-      /* Streamlit's default heading sizes are tuned for dashboards, not for
-         a document a teacher reads top to bottom. */
-      h1{font-size:2.05rem!important; letter-spacing:-.02em; color:var(--ink);}
-      h2{font-size:1.25rem!important; letter-spacing:-.01em;}
-      h3{font-size:1.05rem!important;}
+      html, body, .stApp, [class*="css"]{font-family:var(--serif)!important;}
+      .stApp{background:var(--paper);}
+      .block-container{padding-top:1.5rem; max-width:1280px;}
 
-      section[data-testid="stSidebar"]{background:#f7f9fc;
+      h1,h2,h3,h4{font-family:var(--serif)!important; color:var(--ink);
+        letter-spacing:-.01em; font-weight:600;}
+      h1{font-size:2.15rem!important; letter-spacing:-.02em;}
+      h2{font-size:1.28rem!important;}
+      h3{font-size:1.06rem!important;}
+      p, li, label, span, div{font-family:var(--serif);}
+
+      section[data-testid="stSidebar"]{background:var(--paper-2);
         border-right:1px solid var(--line);}
       section[data-testid="stSidebar"] .block-container{padding-top:1.2rem;}
 
-      /* The headline placement. */
-      .levelcard{background:linear-gradient(135deg,#102236 0%,#1b3a5c 100%);
-        color:#fff; padding:1.15rem 1.4rem; border-radius:14px;
-        margin-bottom:.55rem; box-shadow:0 6px 18px rgba(16,34,54,.18);}
-      .levelcard h2{margin:0!important; font-size:1.75rem!important; color:#fff;
+      /* The headline placement: warm clay rather than navy. */
+      .levelcard{background:linear-gradient(135deg,#8C3F22 0%,#B4542E 55%,#C2763F 100%);
+        color:#FFF8F1; padding:1.2rem 1.45rem; border-radius:14px;
+        margin-bottom:.55rem; box-shadow:0 8px 20px rgba(140,63,34,.22);}
+      .levelcard h2{margin:0!important; font-size:1.8rem!important; color:#FFF8F1!important;
         letter-spacing:-.02em;}
-      .levelcard p{margin:.3rem 0 0; opacity:.82; font-size:.9rem;}
+      .levelcard p{margin:.3rem 0 0; opacity:.9; font-size:.92rem;}
 
-      /* Step indicator: three stages, and the middle one is a safety
-         control, so it should be obvious where you are. */
       .steps{display:flex; gap:.4rem; margin:.1rem 0 1rem;}
-      .step{flex:1; font-size:.72rem; font-weight:600; letter-spacing:.03em;
-        text-transform:uppercase; color:var(--muted); padding:.42rem .6rem;
-        border-radius:7px; background:#f2f5f9; border:1px solid var(--line);
+      .step{flex:1; font-size:.72rem; font-weight:600; letter-spacing:.04em;
+        text-transform:uppercase; color:var(--muted); padding:.44rem .6rem;
+        border-radius:8px; background:var(--paper-2); border:1px solid var(--line);
         text-align:center;}
-      .step.on{background:var(--accent); border-color:var(--accent); color:#fff;}
-      .step.done{background:var(--good-soft); border-color:#bfe3cc;
-        color:var(--good);}
+      .step.on{background:var(--terra); border-color:var(--terra); color:#FFF8F1;}
+      .step.done{background:var(--olive-soft); border-color:#C8D9BC; color:var(--olive);}
 
-      .pill{display:inline-block; padding:.2rem .66rem; border-radius:999px;
-        font-size:.72rem; font-weight:600; margin:0 .35rem .3rem 0;
+      .pill{display:inline-block; padding:.2rem .68rem; border-radius:999px;
+        font-size:.74rem; font-weight:600; margin:0 .35rem .3rem 0;
         border:1px solid transparent;}
-      .ok{background:var(--good-soft); color:var(--good); border-color:#bfe3cc;}
-      .warn{background:var(--bad-soft); color:var(--bad); border-color:#f3c9c5;}
+      .ok{background:var(--olive-soft); color:var(--olive); border-color:#C8D9BC;}
+      .warn{background:var(--brick-soft); color:var(--brick); border-color:#EEC4BC;}
 
-      .muted{color:var(--muted); font-size:.84rem; line-height:1.5;}
-      .quote{border-left:3px solid var(--accent); padding:.15rem 0 .15rem .75rem;
-        color:#31425a; font-style:italic; margin:.45rem 0 .2rem;}
+      .subtitle{margin:-.55rem 0 .5rem; color:var(--terra); font-size:1.02rem;
+        font-weight:600; letter-spacing:.04em; text-transform:uppercase;}
+      .muted{color:var(--muted); font-size:.86rem; line-height:1.55;}
+      .quote{border-left:3px solid var(--terra); padding:.15rem 0 .15rem .8rem;
+        color:#4A3A30; font-style:italic; margin:.45rem 0 .2rem;}
 
-      /* Expanders carry most of the content; soften the default chrome. */
       div[data-testid="stExpander"]{border:1px solid var(--line);
-        border-radius:10px; margin-bottom:.5rem; background:#fff;}
-      div[data-testid="stExpander"] summary{font-size:.93rem;}
+        border-radius:10px; margin-bottom:.5rem; background:#FFFDFA;}
+      div[data-testid="stExpander"] summary{font-size:.95rem;}
 
-      div[data-testid="stMetricValue"]{font-size:1.5rem; letter-spacing:-.02em;}
+      div[data-testid="stMetricValue"]{font-size:1.55rem; letter-spacing:-.02em;
+        color:var(--ink);}
       div[data-testid="stMetricLabel"]{color:var(--muted);}
 
-      .stTabs [data-baseweb="tab"]{font-size:.9rem; padding:.35rem .1rem;}
-      .stTabs [data-baseweb="tab-list"]{gap:1.3rem;}
+      .stTabs [data-baseweb="tab-list"]{gap:1.4rem;
+        border-bottom:1px solid var(--line);}
+      .stTabs [data-baseweb="tab"]{font-size:.92rem; padding:.4rem .1rem;}
 
-      .stButton button{border-radius:8px; font-weight:600;}
+      .stButton button{border-radius:9px; font-weight:600;
+        font-family:var(--serif);}
+
+      code, pre, .stCode{font-family:ui-monospace,'SF Mono',Consolas,monospace!important;}
+      /* Streamlit paints its alerts in cool blues and greys by default. */
+      div[data-testid="stAlert"]{border-radius:10px; border:1px solid var(--line);}
+      /* The progress bar and inline code chips are the last two places
+         Streamlit paints its own blue and green into a warm page. */
+      /* Streamlit's progress-bar internals are unlabelled divs whose nesting
+         changes between versions, so colour every descendant of the bar and
+         let the track's own background show through underneath. */
+      [role="progressbar"] div{background-color:var(--terra)!important;}
+      [role="progressbar"]{background-color:var(--paper-3)!important;
+        border-radius:999px;}
+      code{background:var(--paper-3)!important; color:#6B3A22!important;
+        padding:.05rem .3rem; border-radius:4px;}
     </style>
     """,
     unsafe_allow_html=True,
 )
+
+
+def note(text: str) -> None:
+    """A warm informational callout.
+
+    Streamlit's st.info is a fixed cold blue, and its alert variants cannot
+    be told apart in CSS without depending on generated class names that
+    change between releases. st.warning and st.error are left alone -- amber
+    and red still read correctly against this palette, and they carry real
+    urgency that should not be softened.
+    """
+    st.markdown(
+        '<div style="background:var(--saffron-soft);border:1px solid #E8D4A6;'
+        'border-left:4px solid var(--saffron);border-radius:0 9px 9px 0;'
+        'padding:.75rem 1rem;margin:.35rem 0 .9rem;color:#5B4A2A;'
+        f'font-size:.92rem;line-height:1.55;">{text}</div>',
+        unsafe_allow_html=True,
+    )
 
 
 def stepper(active: int) -> None:
@@ -148,8 +196,8 @@ def reset() -> None:
 # --------------------------------------------------------------------------
 # Sidebar
 # --------------------------------------------------------------------------
-st.sidebar.title("✎ Writing Coach")
-st.sidebar.caption(f"ACTFL 2024 · Writing · {MODEL}")
+st.sidebar.title("✎ Entrenador de escritura")
+st.sidebar.caption(f"ACTFL Writing Coach · 2024 descriptors · {MODEL}")
 
 VIEWS = ["Assess", "Progress", "History"]
 # The view is mirrored in the URL so a teacher can bookmark the progress
@@ -218,13 +266,13 @@ if view == "Progress":
     )
     names = store.students()
     if not names:
-        st.info("No saved assessments yet.")
+        note("No saved assessments yet.")
         st.stop()
 
     who = st.selectbox("Student", names)
     s = progress.summary(who)
     if not s["enough"]:
-        st.info(
+        note(
             f"{who} has {len(s['points'])} saved assessment(s). "
             "At least two are needed to show movement."
         )
@@ -314,7 +362,7 @@ if view == "Progress":
             "being the binding one."
         )
     else:
-        st.info(
+        note(
             f"{CRITERION_LABEL.get(last.limiting, last.limiting)} has been the "
             f"bottleneck throughout. If the practice is not shifting it, the "
             "drills for this criterion are the thing to change."
@@ -328,7 +376,7 @@ if view == "History":
     st.title("Saved assessments")
     runs = store.history()
     if not runs:
-        st.info("Nothing saved yet. Assess a composition and it will appear here.")
+        note("Nothing saved yet. Assess a composition and it will appear here.")
         st.stop()
 
     names = ["Everyone"] + store.students()
@@ -361,7 +409,10 @@ if view == "History":
 # --------------------------------------------------------------------------
 # Assess view
 # --------------------------------------------------------------------------
-st.title("ACTFL Writing Coach")
+st.title("Entrenador de escritura")
+st.markdown(
+    '<p class="subtitle">ACTFL Writing Coach</p>', unsafe_allow_html=True
+)
 st.caption(
     "Reads handwritten Spanish, reports the evidence it shows against the "
     "ACTFL 2024 Writing descriptors, and builds practice aimed at whatever is "
@@ -369,7 +420,7 @@ st.caption(
 )
 
 if not pages:
-    st.info("Add one or more page photos in the sidebar to begin.")
+    note("Add one or more page photos in the sidebar to begin.")
     st.stop()
 
 # Orientation: the axis is detected, the flip is the teacher's call.

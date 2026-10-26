@@ -1,0 +1,35 @@
+{
+  "purpose": "A former Spanish teacher assessing real, previously unseen student work, with his judgement recorded BEFORE the app was run on it.",
+  "rater": "Kyle Yeh, former high-school Spanish teacher",
+  "date": "2026-10-26",
+  "method": "Compositions are genuine College Board AP Spanish Language email-reply responses. The rater had not seen the app's output for them, and was not told their official AP scores before judging. His judgement below was written down before the app was run.",
+  "assignment": "Email reply (interpersonal writing, 15 minutes). Read a formal email and write a reply in a formal register. The reply must address the questions asked in the message, request additional information by asking a question, and include an appropriate greeting and closing.",
+  "items": [
+    {
+      "id": "composition A",
+      "source_file": "ap24-apc-spanish-language-task-1_1B_p1.png",
+      "official_ap_score": 3,
+      "ap_score_withheld_from_rater_until_after": true,
+      "teacher_blind_judgement": {
+        "level": "Intermediate Mid",
+        "what_to_work_on": [
+          "Grammar — subjunctive, e.g. 'pueden' where the subjunctive is required",
+          "Concordancia (agreement) — 'un buen actividad', 'su segundo pregunta'",
+          "Content — be more specific about how the art activity would actually work"
+        ],
+        "minutes_taken": null
+      },
+      "app_result": null,
+      "comparison": null
+    },
+    {
+      "id": "composition B",
+      "source_file": "ap25-apc-spanish-language-task-1_1C_p1.png",
+      "official_ap_score": 2,
+      "ap_score_withheld_from_rater_until_after": true,
+      "teacher_blind_judgement": null,
+      "app_result": null,
+      "comparison": null
+    }
+  ]
+}

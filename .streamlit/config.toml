@@ -1,0 +1,13 @@
+# Streamlit's own theme. Setting it here rather than only overriding CSS means
+# the widgets it draws itself -- inputs, selects, sliders, the file uploader --
+# pick up the palette too, instead of staying default blue inside a warm page.
+#
+# The palette is drawn from Spanish and Latin American ceramics: warm cream
+# paper, terracotta, saffron, and a brown-black ink rather than a cold grey.
+[theme]
+base = "light"
+primaryColor = "#B4542E"
+backgroundColor = "#FCF8F2"
+secondaryBackgroundColor = "#F4EADC"
+textColor = "#2A211C"
+font = "serif"

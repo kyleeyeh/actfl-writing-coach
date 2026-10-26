@@ -145,7 +145,9 @@ CSS = """
 *{box-sizing:border-box}
 body{font:16px/1.65 Georgia,'Times New Roman',serif;color:var(--ink);
      max-width:52em;margin:0 auto;padding:3em 2.2em 6em}
-h1{font-size:2.1em;line-height:1.15;margin:0 0 .15em}
+h1{font-size:2.1em;line-height:1.15;margin:0 0 .05em}
+.subtitle{margin:0 0 .5em;color:var(--accent);font-size:.95em;font-weight:600;
+          letter-spacing:.07em;text-transform:uppercase}
 h2{font-size:1.35em;margin:2.4em 0 .5em;padding-bottom:.25em;
    border-bottom:2px solid var(--rule)}
 h3{font-size:1.07em;margin:1.7em 0 .35em;color:var(--accent)}
@@ -284,10 +286,11 @@ def main() -> int:
 
     html = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
-<title>ACTFL Writing Coach</title>
+<title>Entrenador de escritura</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>{CSS}</style></head><body>
-<h1>ACTFL Writing Coach</h1>
+<h1>Entrenador de escritura</h1>
+<p class="subtitle">ACTFL Writing Coach</p>
 <p class="sub">Kyle Yeh &middot; MGT 409 &middot; {date.today():%d %B %Y}</p>
 <p class="repo"><b>Repository</b> <a href="https://github.com/kyleeyeh/actfl-writing-coach">https://github.com/kyleeyeh/actfl-writing-coach</a></p>
 {"".join(body)}

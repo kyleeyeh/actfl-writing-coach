@@ -42,6 +42,8 @@ CSS = """
            margin-bottom:.4em;letter-spacing:-.01em}
 .reveal p,.reveal li{line-height:1.4}
 .reveal .lead{color:var(--muted);font-size:.78em}
+.reveal .subtitle{color:var(--accent);font-size:.62em;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;margin:-.3em 0 .6em}
 .reveal section{text-align:left}
 .reveal .center{text-align:center}
 .reveal img{border-radius:8px;box-shadow:0 2px 14px rgba(0,0,0,.14);max-height:60vh;
@@ -108,7 +110,8 @@ def main() -> int:
     # 1 -- title
     slides.append(f"""
 <section class="center">
-  <h1>ACTFL Writing Coach</h1>
+  <h1>Entrenador de escritura</h1>
+  <p class="subtitle">ACTFL Writing Coach</p>
   <p class="lead">Photograph a student's handwritten Spanish. Get back the one
   thing holding them below the next proficiency level — and the practice for it.</p>
   <p class="small">Kyle Yeh · MGT 409 · {date.today():%d %B %Y}</p>
@@ -253,7 +256,7 @@ def main() -> int:
     html = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ACTFL Writing Coach</title>
+<title>Entrenador de escritura</title>
 <link rel="stylesheet" href="{REVEAL}/dist/reveal.css">
 <link rel="stylesheet" href="{REVEAL}/dist/theme/white.css">
 <style>{CSS}</style>
