@@ -17,10 +17,24 @@
           "Concordancia (agreement) — 'un buen actividad', 'su segundo pregunta'",
           "Content — be more specific about how the art activity would actually work"
         ],
-        "minutes_taken": null
+        "minutes_taken": 5
       },
-      "app_result": null,
-      "comparison": null
+      "app_result": {
+        "level": "Intermediate Low",
+        "limiting_criterion_matched_teacher": true,
+        "minutes_taken": 2
+      },
+      "comparison": {
+        "level_gap_sublevels": -1,
+        "direction": "app placed one sublevel BELOW the teacher",
+        "consistent_with_measured_bias": true,
+        "note": "The teacher said Intermediate Mid. The official AP score for this composition is 3, and ACTFL's own published comparison associates a 3 with Intermediate Mid -- so the teacher matched the published expectation exactly, and the app sat one sublevel low, the same direction and roughly the same size as the -1.5 bias measured independently on 18 AP samples and on the six-item calibration set.",
+        "diagnosis_agreement": "The app identified the same thing the teacher did, and in more detail. The teacher's own priorities were grammar (subjunctive), concordancia, and content specificity.",
+        "time_minutes": {
+          "teacher": 5,
+          "app": 2
+        }
+      }
     },
     {
       "id": "composition B",
@@ -31,5 +45,11 @@
       "app_result": null,
       "comparison": null
     }
-  ]
+  ],
+  "teacher_verdict": {
+    "would_use": true,
+    "quote": "I would definitely use this as a preliminary starting point, and I would even let my students play with it, telling it to trust its error spotting but defer to a conference with me for tailored coaching. The sample exercises are super targeted toward the gaps the student pointed out.",
+    "named_strength": "Can point out specific errors really quickly, in more elaborate detail than the teacher produced by hand.",
+    "named_limit": "Not a substitute for a coaching conference; the teacher would use it as a first pass, not as the final word."
+  }
 }

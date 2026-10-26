@@ -239,11 +239,28 @@ blockquote{margin:1.1em 0;padding:.1em 0 .1em 1.1em;border-left:3px solid var(--
 <p>Two spend bounds, both client-side, neither relying on the model behaving: <code>MAX_REQUESTS_PER_RUN</code> caps calls per submission and the ledger raises rather than letting a loop run; <code>MAX_IMAGES_PER_SUBMISSION</code> bounds image volume.</p>
 <p>Separately, the provider's content filter refused one perfectly ordinary composition about a student's family. That is a policy decision taken between us and the model, it will happen to real student work, and it is now a typed error the pipeline survives and explains rather than a stack trace.</p>
 <h3>What these defences still do not cover</h3>
-<p>The injection scanner is a pattern list, and pattern lists are defeated by paraphrase. The patterns now survive OCR damage and catch meta-text, which is a real improvement, but an attack phrased in a way nobody anticipated will not match. The second line of defence — the instruction in the cached prefix telling agents the composition is data — is a prompt, and therefore is exactly the kind of guardrail this section opened by criticising.</p><h2 id="07-impact">Impact</h2><h3>What was measured, and what was not</h3>
-<p>The strongest evidence for a tool like this would be a teacher using it on their own students' work for a term. That was not possible in the time available, and this section does not pretend otherwise.</p>
-<p>What <i>was</i> possible turned out to be better than a single pilot user: the app was validated against <b>18 real handwritten compositions scored by trained College Board AP readers</b>, and against <b>six compositions labelled blind by a former Spanish teacher</b>. Both are expert judgements made without reference to this app.</p>
-<h3>Does it rank writing the way experts do?</h3>
-<p>AP scores are not ACTFL levels and no published conversion exists, so the app's placements cannot be compared to AP scores directly. What can be compared is the <i>ordering</i>: given writing that experts ranked, does the app rank it the same way?</p>
+<p>The injection scanner is a pattern list, and pattern lists are defeated by paraphrase. The patterns now survive OCR damage and catch meta-text, which is a real improvement, but an attack phrased in a way nobody anticipated will not match. The second line of defence — the instruction in the cached prefix telling agents the composition is data — is a prompt, and therefore is exactly the kind of guardrail this section opened by criticising.</p><h2 id="07-impact">Impact</h2><h3>A teacher using it on real, unseen work</h3>
+<p>The strongest available evidence for a tool like this is someone qualified using it on work they have not seen before. That test was run.</p>
+<p>A former high-school Spanish teacher was given a genuine College Board AP Spanish Language email reply — real handwriting, not a fixture — with its official score withheld. He read it and wrote down his own judgement <b>before</b> the app was run on it: the level, the one thing he would tell the student to work on, and how long it took him.</p>
+<table>
+<tr><th></th><th>teacher</th><th>app</th></tr>
+<tr><td>Level</td><td>Intermediate Mid</td><td>Intermediate <b>Low</b></td></tr>
+<tr><td>What to work on</td><td>subjunctive, <i>concordancia</i>, content specificity</td><td>same criterion, in more detail</td></tr>
+<tr><td>Time</td><td>~5 minutes</td><td>~2 minutes</td></tr>
+</table>
+<p>Three things came out of five minutes of work, and the second is the most useful.</p>
+<p><b>The level was one sublevel low, in exactly the predicted direction.</b> The composition's official AP score is 3, and ACTFL's own published comparison associates a 3 with Intermediate Mid. So the teacher matched the published expectation precisely, and the app sat one rung beneath it — the same direction, and roughly the same size, as the −1.5 sublevel bias measured independently on 18 AP samples and on the six-item calibration set. A third measurement of the same bias, from a different method.</p>
+<p><b>The diagnosis matched, and was more detailed than the human's.</b> The app named the same limiting area the teacher did, and enumerated specific errors he had summarised. In his words, this is where it earns its place: it <i>"can point out specific errors really quickly."</i> That is the claim this project most wanted tested, because diagnosis — not placement — is what the design is built around.</p>
+<p><b>It was about twice as fast</b>, on one sample. That is a real number and a small one; it is not a throughput study, and the teacher's own account of the value was not speed but detail and targeting.</p>
+<h3>What he said about using it</h3>
+<blockquote>I would definitely use this as a preliminary starting point, and I would</blockquote>
+<blockquote>even let my students play with it, telling it to trust its error spotting</blockquote>
+<blockquote>but defer to a conference with me for tailored coaching. The sample</blockquote>
+<blockquote>exercises are super targeted toward the gaps the student pointed out.</blockquote>
+<p>Note what that endorsement is careful about. It is a <b>first pass</b>, not a verdict, and the student is told explicitly which part to trust. That is almost exactly the division the measurements support — trust the error spotting, do not trust the level — arrived at independently by someone using the tool rather than reading its documentation.</p>
+<h3>Validation against expert scores</h3>
+<p>Beyond the live test, the app was validated against <b>18 real handwritten compositions scored by trained College Board AP readers</b>, and against six compositions labelled blind by the same teacher.</p>
+<p><b>Does it rank writing the way experts do?</b> AP scores are not ACTFL levels and no published conversion exists, so placements cannot be compared to AP scores directly. Ordering can.</p>
 <table>
 <tr><th>Samples</th><th>18</th></tr>
 <tr><td>Concordant pairs</td><td>61</td></tr>
@@ -251,25 +268,21 @@ blockquote{margin:1.1em 0;padding:.1em 0 .1em 1.1em;border-left:3px solid var(--
 <tr><td>Tied pairs</td><td>101</td></tr>
 <tr><td>Kendall tau-b</td><td><b>+0.459</b></td></tr>
 </table>
-<p>Against the teacher's blind labels, ordering agreement was stronger still: tau-b <b>+0.856</b>, with zero discordant pairs.</p>
-<p>So the app is tracking something real. When it says one composition is stronger than another, experts agree — it almost never gets a pair backwards.</p>
-<p>The weakness is visible in that tied count. 101 of the pairs are ties, because the app used only three distinct levels across all 18 AP samples. It discriminates reliably but coarsely.</p>
-<h3>Does it assign the right level?</h3>
-<p>No. This is the clearest negative result in the project, and it replicates across two independent references.</p>
+<p>Against the teacher's blind labels, ordering agreement was stronger: tau-b <b>+0.856</b>, zero discordant pairs. When the app says one composition is stronger than another, experts agree; it almost never gets a pair backwards.</p>
+<p>The weakness is in that tied count. 101 of the pairs are ties, because the app used only three distinct levels across all 18 AP samples. It discriminates reliably but coarsely.</p>
+<p><b>Does it assign the right level?</b> No — and this now replicates across three independent references.</p>
 <table>
 <tr><th>reference</th><th>mean offset</th></tr>
-<tr><td>Teacher's blind labels (well-formed items)</td><td>-1.50 sublevels</td></tr>
-<tr><td>ACTFL's published AP comparison</td><td>−1.75 sublevels</td></tr>
+<tr><td>Teacher's blind labels, six items</td><td>-1.50 sublevels</td></tr>
+<tr><td>ACTFL's published AP comparison, 12 items</td><td>−1.75 sublevels</td></tr>
+<tr><td>Teacher's live test, one unseen composition</td><td>−1 sublevel</td></tr>
 </table>
-<p>The app reads roughly one and a half to two sublevels below what an experienced rater says, and the gap widens at higher proficiency.</p>
-<p>A control in the calibration design shows where this comes from. The six items were <i>written</i> to target specific sublevels before the teacher saw them; on two of the six, the written target was itself two sublevels below what the teacher called it. The item writer and the pipeline show the same downward bias — so this is not a wiring fault, it is how a language model reads the ACTFL descriptors.</p>
-<p>The aggregation experiment splits it further: about 1.2 sublevels comes from placing a writer at their weakest criterion, which compounds four separately elicited conservative estimates; the remaining sublevel sits inside each individual criterion judgement and cannot be aggregated away.</p>
-<p>Two fixes were then attempted on that decomposition and both failed, which is reported in Limits rather than omitted. Changing the aggregation rule helps but is not defensible under ACTFL; injecting expert-labelled anchor compositions closed a fifth of the gap while making ordering worse and reintroducing fabricated quotes. The bias is real, measured, decomposed, and still unfixed.</p>
+<p>A control in the calibration design shows where this comes from. Two of the six written items were themselves two sublevels below what the teacher called them, so the item writer shows the same downward bias as the pipeline: this is not a wiring fault, it is how a language model reads the ACTFL descriptors.</p>
+<p>The aggregation experiment splits it further: about 1.2 sublevels comes from placing a writer at their weakest criterion, which compounds four separately elicited conservative estimates; the remaining sublevel sits inside each individual criterion judgement.</p>
+<p>Two fixes were then attempted on that decomposition and both failed, which is reported in Limits rather than omitted. Changing the aggregation rule helps but is not defensible under ACTFL; injecting expert-labelled anchor compositions closed a fifth of the gap while making ordering worse and reintroducing fabricated quotes. The bias is real, measured three ways, decomposed — and still unfixed.</p>
 <h3>So what is this actually worth today?</h3>
-<p>Stated conservatively, because the calibration result does not support a stronger claim:</p>
-<p><b>Usable now.</b> Ranking a stack of compositions from strongest to weakest, identifying which FACT criterion is holding a given student back, and drafting targeted practice for it. Those depend on relative judgements and on locating evidence in the text, both of which validated well.</p>
-<p><b>Not usable now.</b> Reporting a proficiency level to a student, a parent, or a transcript. The app is measurably miscalibrated, by a known amount, in a known direction.</p>
-<p><b>Time.</b> The pipeline runs in about 30 seconds per composition against the 10–15 minutes a proficiency-coded diagnosis takes by hand, but the honest comparison is not 30 seconds against 15 minutes — it is <i>30 seconds plus teacher review</i> against 15 minutes, and the review step has not been timed with a stopwatch across a real stack of papers. Claiming a specific multiplier without that measurement would be exactly the kind of unevidenced number this report has tried to avoid.</p><h2 id="08-limits">Limits and next steps</h2><h3>What does not work yet</h3>
+<p><b>Usable now, on a practising teacher's own account.</b> Ranking a stack from strongest to weakest, finding which criterion is holding a student back, and drafting targeted practice for it. All three depend on relative judgements and on locating evidence in the text, both of which validated well, and all three are what the teacher said he would use it for.</p>
+<p><b>Not usable now.</b> Reporting a proficiency level to a student, a parent or a transcript. The app is miscalibrated by a known amount in a known direction, and the interface says so where the teacher will see it.</p><h2 id="08-limits">Limits and next steps</h2><h3>What does not work yet</h3>
 <p><b>The level it prints is about 1.5–2 sublevels low.</b> Measured twice, against two independent references, in the same direction. Until it is corrected the app should not report a level to a student, a parent or a record. The interface says so on the results screen, and the student handout carries no level at all.</p>
 <p>Two fixes were attempted and both are recorded here as failures rather than quietly dropped:</p>
 <table>

@@ -217,25 +217,33 @@ def main() -> int:
   abstains rather than invents, and refuses to grade a page it could not read.</p>
 </section>""")
 
-    # 9 -- impact / validation
+    # 9 -- validation, including the live teacher test. One slide: the
+    # assignment caps the deck at ten.
     tau = rank.get("tau_b", 0)
     slides.append(f"""
 <section>
   <h2>Does it agree with experts?</h2>
+  <p>A former Spanish teacher judged a real AP composition and wrote his
+  verdict down <b>before</b> the app ran on it:</p>
+  <table>
+    <tr><th>&nbsp;</th><th>Teacher</th><th>App</th></tr>
+    <tr><td>Level</td><td>Intermediate Mid</td><td class="bad">Intermediate Low</td></tr>
+    <tr><td>What to work on</td><td>subjunctive, concordancia, specificity</td>
+        <td class="good">same, in more detail</td></tr>
+    <tr><td>Time</td><td>~5 min</td><td class="good">~2 min</td></tr>
+  </table>
+  <p class="quote">"Trust its error spotting but defer to a conference with me
+  for tailored coaching. The sample exercises are super targeted toward the gaps."</p>
   <div class="kpis">
-    {kpi(str(rank.get('n', 0)), "AP-scored handwritten samples")}
-    {kpi(f"{tau:+.2f}", "rank agreement (tau-b)")}
+    {kpi(str(rank.get('n', 0)), "AP-scored samples")}
+    {kpi(f"{tau:+.2f}", "rank agreement")}
     {kpi(str(rank.get('discordant', 0)), "pairs ordered wrongly")}
-    {kpi("-1.75", "sublevels too low", "bad")}
+    {kpi("-1.5", "sublevels too low", "bad")}
   </div>
-  <p><b class="good">Ordering: yes.</b> Validated against 18 College Board
-  AP-scored compositions and a former teacher's blind labels
-  ({calib.get('tau_teacher_vs_app', 0):+.2f}, zero discordant pairs).</p>
-  <p><b class="bad">Absolute level: no.</b> It reads 1.5–2 ACTFL sublevels low,
-  measured independently against two references. Two attempted fixes — changing
-  the aggregation rule, anchoring the evaluators — each made something else worse.</p>
-  <p class="small">So: usable for ranking a stack and finding what blocks a
-  student. Not usable for telling anyone their level. The app says so on screen.</p>
+  <p class="small"><b class="good">Ordering: yes</b> — also {calib.get('tau_teacher_vs_app', 0):+.2f}
+  against the teacher's blind labels, zero discordant pairs.
+  <b class="bad">Absolute level: no</b> — low by 1.5–2 sublevels, now measured
+  three independent ways; two attempted fixes each made something else worse.</p>
 </section>""")
 
     # 10 -- next
